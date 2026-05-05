@@ -1,12 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Redis } from "@upstash/redis";
+import { createClient } from "redis";
 
-const redis = new Redis({
-  url: process.env.KV_REST_API_URL!,
-  token: process.env.KV_REST_API_TOKEN!,
-});
+let client: ReturnType<typeof createClient> | null = null;
 
-const EMAIL_SET_KEY = "tnc:waitlist";
+async function getRedis() {
+  if (!client || !client.isOpen) {
+    client = createClient({ url: process.env.REDIS_URL });
+    client.on("error", () => { client = null; });
+    await client.connect();
+  }
+  return client;
+}
 
 export async function POST(req: NextRequest) {
   let email: string;
@@ -30,17 +34,16 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    const redis = await getRedis();
+
     // SADD returns 1 if added, 0 if already exists
-    const added = await redis.sadd(EMAIL_SET_KEY, normalized);
+    const added = await redis.sAdd("tnc:waitlist", normalized);
 
     if (added === 0) {
       return NextResponse.json({ error: "Already subscribed" }, { status: 409 });
     }
 
-    // Store signup timestamp alongside
-    await redis.hset("tnc:waitlist:meta", {
-      [normalized]: new Date().toISOString(),
-    });
+    await redis.hSet("tnc:waitlist:meta", normalized, new Date().toISOString());
 
     return NextResponse.json({ ok: true }, { status: 201 });
   } catch (err) {
