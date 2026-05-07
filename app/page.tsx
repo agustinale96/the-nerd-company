@@ -270,7 +270,7 @@ export default function Home() {
       </section>
 
       {/* Services section */}
-      <section className="px-6 py-24 flex flex-col items-center gap-16" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+      <section className="px-6 py-24 flex flex-col items-center gap-16" style={{ background: "#0d0f0e", borderTop: "1px solid rgba(0,255,135,0.06)" }}>
         <div className="w-full max-w-2xl flex flex-col gap-12">
 
           <h2
@@ -324,7 +324,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="px-6 py-8 text-center" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+      <footer className="px-6 py-8 text-center" style={{ background: "#0d0f0e", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
         <p className="text-xs" style={{ color: "#333" }}>
           © {new Date().getFullYear()} The Nerd Company
         </p>

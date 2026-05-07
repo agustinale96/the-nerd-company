@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Archivo, Special_Gothic_Condensed_One } from "next/font/google";
+import SmoothScroll from "./components/SmoothScroll";
 import "./globals.css";
 
 const archivo = Archivo({
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${archivo.variable} ${specialGothic.variable}`}>
-      <body>{children}</body>
+      <body><SmoothScroll>{children}</SmoothScroll></body>
     </html>
   );
 }
