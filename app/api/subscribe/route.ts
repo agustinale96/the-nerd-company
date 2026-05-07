@@ -13,37 +13,36 @@ async function getRedis() {
 }
 
 export async function POST(req: NextRequest) {
-  let email: string;
+  let name: string, email: string, company: string, message: string;
 
   try {
     const body = await req.json();
+    name = body.name;
     email = body.email;
+    company = body.company;
+    message = body.message;
   } catch {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
-  if (!email || typeof email !== "string") {
-    return NextResponse.json({ error: "Email is required" }, { status: 400 });
-  }
-
-  const normalized = email.trim().toLowerCase();
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  if (!emailRegex.test(normalized)) {
-    return NextResponse.json({ error: "Invalid email format" }, { status: 400 });
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return NextResponse.json({ error: "Invalid email" }, { status: 400 });
   }
 
   try {
     const redis = await getRedis();
+    const id = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 
-    // SADD returns 1 if added, 0 if already exists
-    const added = await redis.sAdd("tnc:waitlist", normalized);
+    await redis.hSet(`tnc:lead:${id}`, {
+      name: name ?? "",
+      email,
+      company: company ?? "",
+      message: message ?? "",
+      createdAt: new Date().toISOString(),
+    });
 
-    if (added === 0) {
-      return NextResponse.json({ error: "Already subscribed" }, { status: 409 });
-    }
-
-    await redis.hSet("tnc:waitlist:meta", normalized, new Date().toISOString());
+    // Index by email for quick lookup
+    await redis.sAdd("tnc:leads", id);
 
     return NextResponse.json({ ok: true }, { status: 201 });
   } catch (err) {
