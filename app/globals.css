@@ -18,7 +18,7 @@ html { scroll-behavior: smooth; }
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: var(--font-geist-sans), "Inter", system-ui, sans-serif;
+  font-family: var(--font-archivo), system-ui, sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
 }
