@@ -1,22 +1,15 @@
 import type { Metadata } from "next";
+import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "The Nerd Company",
-  description: "Something nerdy is coming. Get early access.",
-  openGraph: {
-    title: "The Nerd Company",
-    description: "Something nerdy is coming. Get early access.",
-  },
+  description: "Something nerdy is coming.",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={GeistSans.variable}>
       <body>{children}</body>
     </html>
   );
