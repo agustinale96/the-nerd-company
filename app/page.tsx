@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const STEPS = [
   { id: 1, label: "Nombre", placeholder: "Juan García", type: "text" as const },
-  { id: 2, label: "Correo electrónico", placeholder: "juan@empresa.com", type: "email" as const },
+  { id: 2, label: "Email", placeholder: "juan@empresa.com", type: "email" as const },
   { id: 3, label: "Empresa", placeholder: "Acme Inc.", type: "text" as const },
   { id: 4, label: "Mensaje", placeholder: "Cuéntanos tu idea", type: "textarea" as const },
 ];
@@ -94,7 +94,7 @@ export default function Home() {
 
         {/* Title */}
         <h1 className="text-3xl sm:text-4xl font-bold text-center leading-tight fade-up fade-up-delay-1">
-          Cuéntanos sobre tu<br />proyecto o idea.
+          <span className="cursor">Cuéntanos sobre tu<br />proyecto o idea.</span>
         </h1>
 
         {/* Step indicators */}
@@ -186,7 +186,7 @@ export default function Home() {
         </div>
 
         {/* Navigation */}
-        <div className="fade-up fade-up-delay-3 flex items-center justify-between">
+        <div className={`fade-up fade-up-delay-3 flex items-center ${step === 0 ? "justify-end" : "justify-between"}`}>
           <button
             onClick={() => { setStep((s) => s - 1); setStatus("idle"); }}
             disabled={step === 0}
@@ -220,12 +220,12 @@ export default function Home() {
         <p className="text-center text-xs fade-up fade-up-delay-3" style={{ color: "#444" }}>
           o envíanos un correo a{" "}
           <a
-            href="mailto:agustinale96@gmail.com"
+            href="mailto:agustin@thenerdcompany.com"
             style={{ color: "#666" }}
             onMouseEnter={(e) => { e.currentTarget.style.color = "var(--accent)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.color = "#666"; }}
           >
-            agustinale96@gmail.com
+            agustin@thenerdcompany.com
           </a>
         </p>
 
