@@ -9,6 +9,24 @@ const STEPS = [
   { id: 4, label: "Mensaje", placeholder: "Cuéntanos tu idea", type: "textarea" as const },
 ];
 
+const SERVICES = [
+  {
+    number: "01",
+    name:   "Desarrollo de Software",
+    desc:   "Construimos productos digitales a medida, desde MVPs hasta sistemas escalables.",
+  },
+  {
+    number: "02",
+    name:   "Consultoría Tech",
+    desc:   "Ayudamos a equipos y empresas a tomar mejores decisiones tecnológicas.",
+  },
+  {
+    number: "03",
+    name:   "Diseño de Producto",
+    desc:   "Diseño de experiencias digitales centradas en el usuario y la conversión.",
+  },
+];
+
 const CONTACT_EMAIL = "agustin@thenerdcompany.com";
 
 type Status = "idle" | "loading" | "success" | "error";
@@ -21,6 +39,7 @@ export default function Home() {
   const [blurring, setBlurring] = useState(false);
   const [copied, setCopied]     = useState(false);
   const inputRef                = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
+  const formRef                 = useRef<HTMLDivElement>(null);
 
   const current = STEPS[step];
   const isLast  = step === STEPS.length - 1;
@@ -83,6 +102,10 @@ export default function Home() {
     setTimeout(() => setCopied(false), 2000);
   }
 
+  function scrollToForm() {
+    formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
 
@@ -92,39 +115,32 @@ export default function Home() {
         style={{ backdropFilter: "blur(12px)", borderBottom: "1px solid rgba(255,255,255,0.04)" }}
       >
         <span
-          className="text-xl tracking-wide select-none"
-          style={{ fontFamily: "var(--font-special-gothic)", color: "var(--fg)", letterSpacing: "0.04em" }}
+          className="text-xl select-none"
+          style={{ fontFamily: "var(--font-special-gothic)", color: "var(--fg)", letterSpacing: "0.03em" }}
         >
-          THE NERD COMPANY
+          The Nerd Company
         </span>
 
         <button
           onClick={copyEmail}
           className="text-sm px-4 py-1.5 rounded-full transition-all duration-200"
           style={{
-            border:  "1px solid rgba(255,255,255,0.1)",
-            color:   copied ? "var(--accent)" : "#888",
-            borderColor: copied ? "rgba(0,255,135,0.3)" : "rgba(255,255,255,0.1)",
+            border:      `1px solid ${copied ? "rgba(0,255,135,0.3)" : "rgba(255,255,255,0.1)"}`,
+            color:       copied ? "var(--accent)" : "#888",
           }}
           onMouseEnter={(e) => {
-            if (!copied) {
-              e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
-              e.currentTarget.style.color = "#ccc";
-            }
+            if (!copied) { e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)"; e.currentTarget.style.color = "#ccc"; }
           }}
           onMouseLeave={(e) => {
-            if (!copied) {
-              e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
-              e.currentTarget.style.color = "#888";
-            }
+            if (!copied) { e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; e.currentTarget.style.color = "#888"; }
           }}
         >
           {copied ? "copiado ✓" : "contáctanos"}
         </button>
       </header>
 
-      {/* Main */}
-      <main className="flex-1 flex items-center justify-center px-6 pt-20">
+      {/* Form section */}
+      <section ref={formRef} className="min-h-screen flex items-center justify-center px-6 pt-20">
         {status === "success" ? (
           <div className="page-in text-center flex flex-col items-center gap-6">
             <div
@@ -143,10 +159,7 @@ export default function Home() {
         ) : (
           <div className="page-in w-full max-w-md flex flex-col gap-10">
 
-            {/* Title */}
-            <h1
-              className="text-3xl sm:text-[2.4rem] font-semibold text-center leading-tight tracking-tight fade-up fade-up-delay-1"
-            >
+            <h1 className="text-3xl sm:text-[2.4rem] font-semibold text-center leading-tight tracking-tight fade-up fade-up-delay-1">
               <span className="cursor">Cuéntanos sobre tu<br />proyecto o idea.</span>
             </h1>
 
@@ -195,20 +208,12 @@ export default function Home() {
                   disabled={status === "loading"}
                   className="w-full px-4 py-3 text-sm rounded-xl outline-none resize-none"
                   style={{
-                    background: "rgba(255,255,255,0.03)",
-                    color:      "var(--fg)",
-                    border:     `1px solid ${status === "error" ? "#ff4d4f" : "rgba(255,255,255,0.07)"}`,
-                    caretColor: "var(--accent)",
-                    transition: "border-color 0.2s, box-shadow 0.2s",
+                    background: "rgba(255,255,255,0.03)", color: "var(--fg)",
+                    border: `1px solid ${status === "error" ? "#ff4d4f" : "rgba(255,255,255,0.07)"}`,
+                    caretColor: "var(--accent)", transition: "border-color 0.2s, box-shadow 0.2s",
                   }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(0,255,135,0.35)";
-                    e.currentTarget.style.boxShadow   = "0 0 0 3px rgba(0,255,135,0.06)";
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = status === "error" ? "#ff4d4f" : "rgba(255,255,255,0.07)";
-                    e.currentTarget.style.boxShadow   = "none";
-                  }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(0,255,135,0.35)"; e.currentTarget.style.boxShadow = "0 0 0 3px rgba(0,255,135,0.06)"; }}
+                  onBlur={(e)  => { e.currentTarget.style.borderColor = status === "error" ? "#ff4d4f" : "rgba(255,255,255,0.07)"; e.currentTarget.style.boxShadow = "none"; }}
                 />
               ) : (
                 <input
@@ -221,20 +226,12 @@ export default function Home() {
                   onKeyDown={(e) => { if (e.key === "Enter") { isLast ? handleSubmit() : handleNext(); } }}
                   className="w-full px-4 py-3 text-sm rounded-xl outline-none"
                   style={{
-                    background: "rgba(255,255,255,0.03)",
-                    color:      "var(--fg)",
-                    border:     `1px solid ${status === "error" ? "#ff4d4f" : "rgba(255,255,255,0.07)"}`,
-                    caretColor: "var(--accent)",
-                    transition: "border-color 0.2s, box-shadow 0.2s",
+                    background: "rgba(255,255,255,0.03)", color: "var(--fg)",
+                    border: `1px solid ${status === "error" ? "#ff4d4f" : "rgba(255,255,255,0.07)"}`,
+                    caretColor: "var(--accent)", transition: "border-color 0.2s, box-shadow 0.2s",
                   }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(0,255,135,0.35)";
-                    e.currentTarget.style.boxShadow   = "0 0 0 3px rgba(0,255,135,0.06)";
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = status === "error" ? "#ff4d4f" : "rgba(255,255,255,0.07)";
-                    e.currentTarget.style.boxShadow   = "none";
-                  }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(0,255,135,0.35)"; e.currentTarget.style.boxShadow = "0 0 0 3px rgba(0,255,135,0.06)"; }}
+                  onBlur={(e)  => { e.currentTarget.style.borderColor = status === "error" ? "#ff4d4f" : "rgba(255,255,255,0.07)"; e.currentTarget.style.boxShadow = "none"; }}
                 />
               )}
 
@@ -268,23 +265,71 @@ export default function Home() {
               </button>
             </div>
 
-            {/* Email copy */}
-            <p className="fade-up fade-up-delay-3 text-center text-xs" style={{ color: "#333" }}>
-              o envíanos un correo a{" "}
-              <button
-                onClick={copyEmail}
-                className="transition-colors duration-200"
-                style={{ color: copied ? "var(--accent)" : "#555" }}
-                onMouseEnter={(e) => { if (!copied) e.currentTarget.style.color = "var(--accent)"; }}
-                onMouseLeave={(e) => { if (!copied) e.currentTarget.style.color = "#555"; }}
-              >
-                {copied ? "copiado ✓" : CONTACT_EMAIL}
-              </button>
-            </p>
-
           </div>
         )}
-      </main>
+      </section>
+
+      {/* Services section */}
+      <section className="px-6 py-24 flex flex-col items-center gap-16" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+        <div className="w-full max-w-2xl flex flex-col gap-12">
+
+          <h2
+            className="text-3xl sm:text-4xl font-semibold text-center leading-tight"
+            style={{ letterSpacing: "-0.02em" }}
+          >
+            Lo que hacemos
+          </h2>
+
+          <div className="flex flex-col gap-px" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+            {SERVICES.map((s) => (
+              <div
+                key={s.number}
+                className="flex gap-6 py-8 group"
+                style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+              >
+                <span
+                  className="text-xs pt-1 shrink-0 font-mono"
+                  style={{ color: "var(--accent)", opacity: 0.7, minWidth: 24 }}
+                >
+                  {s.number}
+                </span>
+                <div className="flex flex-col gap-2">
+                  <h3
+                    className="text-lg font-semibold transition-colors duration-200"
+                    style={{ color: "var(--fg)" }}
+                  >
+                    {s.name}
+                  </h3>
+                  <p className="text-sm leading-relaxed" style={{ color: "var(--fg-muted)" }}>
+                    {s.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex justify-center">
+            <button
+              onClick={scrollToForm}
+              className="px-10 py-3 text-sm font-semibold rounded-full transition-all duration-200"
+              style={{ background: "var(--accent)", color: "var(--bg)" }}
+              onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.85"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.opacity = "1";    e.currentTarget.style.transform = "translateY(0)"; }}
+            >
+              Hablemos de tu proyecto →
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="px-6 py-8 text-center" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+        <p className="text-xs" style={{ color: "#333" }}>
+          © {new Date().getFullYear()} The Nerd Company
+        </p>
+      </footer>
+
     </div>
   );
 }
