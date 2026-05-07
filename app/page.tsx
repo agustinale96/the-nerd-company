@@ -43,7 +43,7 @@ const FORM_STEPS = [
   { id: 4, label: "Mensaje", placeholder: "Cuéntanos qué estás creando", type: "textarea" as const },
 ];
 
-const CONTACT_EMAIL = "agustin@thenerdcompany.com";
+const CONTACT_EMAIL = "hellothere@thenerdcompany.com";
 
 /* ─── Types ─────────────────────────────────────────────────── */
 type FormStatus = "idle" | "loading" | "success" | "error";
@@ -194,7 +194,7 @@ export default function Home() {
 
       {/* ── HERO ── */}
       <section id="hero" className="dot-grid relative min-h-screen flex flex-col items-center justify-center px-6 pt-24 pb-16 text-center">
-        <div className="page-in w-full max-w-3xl flex flex-col items-center gap-8">
+        <div className="page-in w-full max-w-[800px] flex flex-col items-center gap-8">
 
           <span
             className="text-xs px-3 py-1 rounded-full"
@@ -246,7 +246,7 @@ export default function Home() {
 
       {/* ── SERVICES ── */}
       <section id="servicios" className="px-6 py-24" style={{ background: "var(--bg-alt)", borderTop: "1px solid rgba(0,255,135,0.06)" }}>
-        <div className="w-full max-w-2xl mx-auto flex flex-col gap-12">
+        <div className="w-full max-w-[800px] mx-auto flex flex-col gap-12">
 
           <div data-reveal>
             <p className="text-xs tracking-widest uppercase mb-3" style={{ color: "var(--accent)" }}>Servicios</p>
@@ -270,7 +270,7 @@ export default function Home() {
 
       {/* ── PROCESS ── */}
       <section id="proceso" className="px-6 py-24" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-        <div className="w-full max-w-2xl mx-auto flex flex-col gap-12">
+        <div className="w-full max-w-[800px] mx-auto flex flex-col gap-12">
 
           <div data-reveal>
             <p className="text-xs tracking-widest uppercase mb-3" style={{ color: "var(--accent)" }}>Proceso</p>
@@ -298,7 +298,7 @@ export default function Home() {
 
       {/* ── STACK ── */}
       <section id="stack" className="px-6 py-24" style={{ background: "var(--bg-alt)", borderTop: "1px solid rgba(0,255,135,0.06)" }}>
-        <div className="w-full max-w-2xl mx-auto flex flex-col gap-10">
+        <div className="w-full max-w-[800px] mx-auto flex flex-col gap-10">
 
           <div data-reveal>
             <p className="text-xs tracking-widest uppercase mb-3" style={{ color: "var(--accent)" }}>Tecnologías</p>
@@ -321,7 +321,7 @@ export default function Home() {
 
       {/* ── WHO WE ARE ── */}
       <section id="quienes-somos" className="px-6 py-24" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-        <div className="w-full max-w-2xl mx-auto flex flex-col gap-14">
+        <div className="w-full max-w-[800px] mx-auto flex flex-col gap-14">
 
           <div className="flex flex-col gap-6">
             <div data-reveal>
@@ -353,7 +353,7 @@ export default function Home() {
 
       {/* ── CONTACT FORM ── */}
       <section id="contacto" ref={contactRef} className="px-6 py-24" style={{ background: "var(--bg-alt)", borderTop: "1px solid rgba(0,255,135,0.06)" }}>
-        <div className="w-full max-w-md mx-auto flex flex-col gap-10">
+        <div className="w-full max-w-[800px] mx-auto flex flex-col gap-10">
 
           {formStatus === "success" ? (
             <div className="page-in text-center flex flex-col items-center gap-6 py-16">
@@ -445,7 +445,7 @@ export default function Home() {
 
       {/* ── FOOTER ── */}
       <footer className="px-6 py-12" style={{ background: "var(--bg-alt)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-        <div className="max-w-2xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+        <div className="max-w-[800px] mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div className="flex flex-col gap-1">
             <span style={{ fontFamily: "var(--font-special-gothic)", fontSize: "1rem", letterSpacing: "0.03em" }}>The Nerd Company</span>
             <span className="text-xs" style={{ color: "#444" }}>Buenos Aires — Remote Worldwide</span>
