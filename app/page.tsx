@@ -48,7 +48,11 @@ export default function Home() {
 
   useEffect(() => {
     const saved = localStorage.getItem("tnc-lang") as Lang | null;
-    if (saved && saved in T) setLang(saved);
+    if (saved && saved in T) { setLang(saved); return; }
+    const browser = navigator.language.toLowerCase();
+    if (browser.startsWith("pt")) setLang("pt");
+    else if (browser.startsWith("en")) setLang("en");
+    // else stays "es"
   }, []);
 
   function switchLang(l: Lang) {
