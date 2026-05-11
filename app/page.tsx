@@ -321,7 +321,7 @@ export default function Home() {
                   <h3 className="font-mono text-sm font-bold mb-2 uppercase tracking-wider" style={{ color: "var(--fg)" }}>{s.name}</h3>
                   <p className="text-sm leading-relaxed" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace", fontSize: "0.75rem" }}>{s.desc}</p>
                 </div>
-                <div className="hidden md:block shrink-0" style={{ width: 180, height: 120 }}>
+                <div className="hidden md:block shrink-0 w-80 h-56">
                   <ServiceGraphic n={s.n} />
                 </div>
               </div>
