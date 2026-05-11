@@ -82,13 +82,13 @@ export default function ContactPage() {
 
       {/* Header */}
       <header className="flex items-center justify-between px-6 py-4"
-        style={{ borderBottom: "1px solid var(--border)" }}>
-        <Link href="/" style={{ fontFamily: "var(--font-special-gothic)", color: "var(--fg)", fontSize: "1rem", letterSpacing: "0.03em" }}>
+        style={{ background: "rgba(6,12,6,0.9)", backdropFilter: "blur(12px)", borderBottom: "1px solid var(--border)" }}>
+        <Link href="/" className="text-lg select-none" style={{ fontFamily: "var(--font-special-gothic)", color: "var(--fg)", letterSpacing: "0.03em" }}>
           The Nerd Company
         </Link>
         <Link href="/" className="font-mono text-xs uppercase tracking-widest" style={{ color: "var(--fg-dim)" }}
-          onMouseEnter={(e) => { e.currentTarget.style.color = "var(--fg)"; }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = "var(--fg-dim)"; }}>
+          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--fg)"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--fg-dim)"; }}>
           ← Volver
         </Link>
       </header>

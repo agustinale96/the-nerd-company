@@ -248,7 +248,8 @@ export default function Home() {
           </div>
 
           <h1 id="hero-h1" className="font-display text-6xl sm:text-7xl md:text-8xl leading-none" style={{ color: "var(--fg)" }}>
-            TU PRODUCTO, <span className="highlight-bar">POTENCIADO CON IA.</span><span className="cursor" />
+            TU PRODUCTO,<br />
+            <span className="highlight-bar">POTENCIADO CON IA.</span><span className="cursor" />
           </h1>
 
           <p id="hero-sub" className="text-sm sm:text-base leading-relaxed max-w-xl" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace" }}>
@@ -258,9 +259,6 @@ export default function Home() {
           <div id="hero-btns" className="flex flex-col sm:flex-row gap-3 mt-2 justify-center">
             <button onClick={() => scrollTo("#contacto")} className="btn-primary">
               Explorá cómo aplicamos IA →
-            </button>
-            <button onClick={() => scrollTo("#servicios")} className="btn-ghost">
-              Ver casos reales
             </button>
           </div>
 
@@ -291,7 +289,7 @@ export default function Home() {
 
       {/* ── QUOTE: phrase + globe ── */}
       <section style={{ background: "var(--bg-alt)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
-        <div className="w-full max-w-[1200px] mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div className="w-full max-w-[1200px] mx-auto px-6 py-20 flex flex-col md:flex-row gap-12 md:items-center">
           <div id="quote-text" className="flex flex-col gap-4">
             <p className="gsap-label font-mono text-xs" style={{ color: "var(--fg-dim)" }}>// insight</p>
             <blockquote className="font-display text-4xl sm:text-5xl leading-tight" style={{ color: "var(--fg)" }}>
@@ -301,7 +299,7 @@ export default function Home() {
               Cada decisión con datos, cada interacción más inteligente, cada producto más competitivo.
             </p>
           </div>
-          <div id="globe-wrap" className="w-full aspect-square max-w-md mx-auto">
+          <div id="globe-wrap" className="w-72 h-72 shrink-0 mx-auto md:mx-0">
             <Globe />
           </div>
         </div>

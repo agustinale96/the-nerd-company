@@ -16,7 +16,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${archivo.variable} ${specialGothic.variable} ${vt323.variable} ${spaceMono.variable}`}>
-      <body><SmoothScroll>{children}</SmoothScroll></body>
+      <body>
+        <div id="crt-scanline" style={{ position: "fixed", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(transparent, rgba(168,255,60,0.07) 50%, transparent)", pointerEvents: "none", zIndex: 9998, willChange: "transform" }} />
+        <SmoothScroll>{children}</SmoothScroll>
+      </body>
     </html>
   );
 }

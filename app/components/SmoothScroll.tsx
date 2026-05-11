@@ -20,6 +20,14 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     gsap.ticker.add(lenisRaf);
     gsap.ticker.lagSmoothing(0);
 
+    /* CRT scanline sweep — runs on every page */
+    gsap.to("#crt-scanline", {
+      y: "100vh",
+      duration: 6,
+      ease: "none",
+      repeat: -1,
+    });
+
     return () => {
       lenis.destroy();
       gsap.ticker.remove(lenisRaf);
