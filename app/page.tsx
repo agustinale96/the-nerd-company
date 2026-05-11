@@ -314,33 +314,33 @@ export default function Home() {
       </section>
 
       {/* ── SERVICES ── */}
-      <section id="servicios" className="px-6 py-24" style={{ background: "var(--accent)" }}>
+      <section id="servicios" className="px-6 py-24" style={{ background: "#1a3d10" }}>
         <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-12">
           <div>
-            <p className="gsap-label font-mono text-xs mb-3" style={{ color: "rgba(0,0,0,0.45)" }}>// servicios</p>
-            <h2 className="gsap-heading glitch-title font-display text-5xl sm:text-6xl" style={{ color: "var(--bg)" }}>LO QUE HACEMOS</h2>
+            <p className="gsap-label font-mono text-xs mb-3" style={{ color: "rgba(168,255,60,0.4)" }}>// servicios</p>
+            <h2 className="gsap-heading glitch-title font-display text-5xl sm:text-6xl" style={{ color: "var(--accent)" }}>LO QUE HACEMOS</h2>
           </div>
-          <div style={{ borderTop: "1px solid rgba(0,0,0,0.15)" }}>
+          <div style={{ borderTop: "1px solid rgba(168,255,60,0.15)" }}>
             {SERVICES.map((s) => (
-              <div key={s.n} className="gsap-srv-row py-10 flex flex-col md:flex-row gap-8 md:gap-12 md:items-center" style={{ borderBottom: "1px solid rgba(0,0,0,0.15)" }}>
+              <div key={s.n} className="gsap-srv-row py-10 flex flex-col md:flex-row gap-8 md:gap-12 md:items-center" style={{ borderBottom: "1px solid rgba(168,255,60,0.15)" }}>
                 {/* Text */}
                 <div className="flex gap-6 flex-1 min-w-0">
-                  <span className="font-mono text-xs pt-1 shrink-0" style={{ color: "rgba(0,0,0,0.4)", minWidth: 24 }}>{s.n}</span>
+                  <span className="font-mono text-xs pt-1 shrink-0" style={{ color: "rgba(168,255,60,0.35)", minWidth: 24 }}>{s.n}</span>
                   <div>
-                    <div className="font-display text-4xl sm:text-5xl leading-none mb-3" style={{ color: "var(--bg)" }}>{s.verb}</div>
-                    <h3 className="font-mono text-sm font-bold mb-2 uppercase tracking-wider" style={{ color: "rgba(0,0,0,0.7)" }}>{s.name}</h3>
-                    <p style={{ color: "rgba(0,0,0,0.55)", fontFamily: "var(--font-space-mono), monospace", fontSize: "0.75rem", lineHeight: 1.7 }}>{s.desc}</p>
+                    <div className="font-display text-4xl sm:text-5xl leading-none mb-3" style={{ color: "var(--fg)" }}>{s.verb}</div>
+                    <h3 className="font-mono text-sm font-bold mb-2 uppercase tracking-wider" style={{ color: "var(--fg-dim)" }}>{s.name}</h3>
+                    <p style={{ color: "rgba(168,255,60,0.45)", fontFamily: "var(--font-space-mono), monospace", fontSize: "0.75rem", lineHeight: 1.7 }}>{s.desc}</p>
                   </div>
                 </div>
                 {/* Image */}
-                <div className="shrink-0 w-full md:w-72 lg:w-80" style={{ aspectRatio: "4/3", border: "1px solid rgba(0,0,0,0.15)", background: "rgba(0,0,0,0.06)", overflow: "hidden" }}>
+                <div className="shrink-0 w-full md:w-72 lg:w-80" style={{ aspectRatio: "4/3", border: "1px solid rgba(168,255,60,0.15)", background: "rgba(0,0,0,0.2)", overflow: "hidden" }}>
                   <img src={s.img} alt={s.name} style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.8 }} />
                 </div>
               </div>
             ))}
           </div>
           <div>
-            <button onClick={() => scrollTo("#contacto")} className="btn-dark">Hablemos de tu producto →</button>
+            <button onClick={() => scrollTo("#contacto")} className="btn-primary">Hablemos de tu producto →</button>
           </div>
         </div>
       </section>
