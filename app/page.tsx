@@ -2,7 +2,6 @@
 
 import { useState, useRef } from "react";
 import GsapAnimations from "./components/GsapAnimations";
-import SplineViewer from "./components/SplineViewer";
 
 /* ─── Data ──────────────────────────────────────────────────── */
 const NAV_LINKS = [
@@ -239,18 +238,9 @@ export default function Home() {
       )}
 
       {/* ── HERO ── */}
-      <section id="hero" className="min-h-screen relative overflow-hidden flex flex-col items-center justify-center px-6 pt-24 pb-16">
+      <section id="hero" className="min-h-screen flex flex-col items-center justify-center px-6 pt-24 pb-16">
 
-        {/* Spline 3D robot — background layer */}
-        <div
-          className="absolute inset-0"
-          style={{ zIndex: 0, pointerEvents: "none" }}
-        >
-          <SplineViewer url="https://prod.spline.design/kv2ymKWMhCi5eQnx/scene.splinecode" />
-        </div>
-
-        {/* Text content — centered on top */}
-        <div className="page-in w-full max-w-[1200px] mx-auto flex flex-col items-center text-center gap-8" style={{ position: "relative", zIndex: 3 }}>
+        <div className="page-in w-full max-w-[1200px] mx-auto flex flex-col items-center text-center gap-8">
 
           <div id="hero-prompt" className="font-mono text-xs" style={{ color: "var(--fg-dim)" }}>
             <span style={{ color: "var(--accent)" }}>$</span> whoami — The Nerd Company v1.0
