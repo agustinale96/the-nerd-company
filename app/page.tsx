@@ -15,18 +15,24 @@ const NAV_LINKS = [
 const SERVICES = [
   {
     n: "01",
+    verb: "INTEGRAR",
     name: "IA aplicada a tu producto",
     desc: "Incorporamos inteligencia artificial donde más impacto tiene en tu negocio. Desde recomendaciones personalizadas hasta decisiones automatizadas que escalan con vos.",
+    img: "/service-placeholder.svg",
   },
   {
     n: "02",
+    verb: "CONSTRUIR",
     name: "Productos digitales con IA integrada",
     desc: "Construimos productos que aprenden. MVPs y plataformas con IA integrada desde el primer sprint — no como feature, sino como núcleo del negocio.",
+    img: "/service-placeholder.svg",
   },
   {
     n: "03",
+    verb: "OPTIMIZAR",
     name: "Estrategia e integración de IA",
     desc: "Te ayudamos a entender dónde la IA genera ventaja real en tu contexto — y lo construimos. Sin hype, sin soluciones genéricas. Con tu stack, tus datos, tu lógica.",
+    img: "/service-placeholder.svg",
   },
 ];
 
@@ -316,11 +322,19 @@ export default function Home() {
           </div>
           <div style={{ borderTop: "1px solid var(--border)" }}>
             {SERVICES.map((s) => (
-              <div key={s.n} className="gsap-srv-row flex gap-6 py-8" style={{ borderBottom: "1px solid var(--border)" }}>
-                <span className="font-mono text-xs pt-1 shrink-0" style={{ color: "var(--accent)", minWidth: 24 }}>{s.n}</span>
-                <div>
-                  <h3 className="font-mono text-sm font-bold mb-2 uppercase tracking-wider" style={{ color: "var(--fg)" }}>{s.name}</h3>
-                  <p className="text-sm leading-relaxed" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace", fontSize: "0.75rem" }}>{s.desc}</p>
+              <div key={s.n} className="gsap-srv-row py-10 flex flex-col md:flex-row gap-8 md:gap-12 md:items-center" style={{ borderBottom: "1px solid var(--border)" }}>
+                {/* Text */}
+                <div className="flex gap-6 flex-1 min-w-0">
+                  <span className="font-mono text-xs pt-1 shrink-0" style={{ color: "var(--accent)", minWidth: 24 }}>{s.n}</span>
+                  <div>
+                    <div className="font-display text-4xl sm:text-5xl leading-none mb-3" style={{ color: "var(--accent)" }}>{s.verb}</div>
+                    <h3 className="font-mono text-sm font-bold mb-2 uppercase tracking-wider" style={{ color: "var(--fg)" }}>{s.name}</h3>
+                    <p style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace", fontSize: "0.75rem", lineHeight: 1.7 }}>{s.desc}</p>
+                  </div>
+                </div>
+                {/* Image */}
+                <div className="shrink-0 w-full md:w-72 lg:w-80" style={{ aspectRatio: "4/3", border: "1px solid var(--border)", background: "rgba(168,255,60,0.03)", overflow: "hidden" }}>
+                  <img src={s.img} alt={s.name} style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.7 }} />
                 </div>
               </div>
             ))}
