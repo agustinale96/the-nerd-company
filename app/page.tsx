@@ -314,7 +314,7 @@ export default function Home() {
       </section>
 
       {/* ── SERVICES ── */}
-      <section id="servicios" className="px-6 py-24" style={{ background: "#1a3d10" }}>
+      <section id="servicios" className="services-texture px-6 py-24">
         <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-12">
           <div>
             <p className="gsap-label font-mono text-xs mb-3" style={{ color: "rgba(168,255,60,0.4)" }}>// servicios</p>
@@ -436,14 +436,6 @@ export default function Home() {
                   <div key={f.name} className="flex flex-col gap-1 p-4" style={{ border: "1px solid var(--border)", background: "rgba(0,0,0,0.3)" }}>
                     <span className="font-mono text-xs font-bold" style={{ color: "var(--fg)" }}>{f.name}</span>
                     <span className="font-mono text-xs uppercase tracking-widest" style={{ color: "var(--accent)", fontSize: "0.6rem" }}>{f.role}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="flex flex-col gap-3">
-                <p className="gsap-label font-mono text-xs uppercase tracking-widest" style={{ color: "var(--fg-muted)" }}>// lo que evitamos</p>
-                {AVOID.map((a, i) => (
-                  <div key={i} className="gsap-avoid-item flex items-center gap-3 font-mono text-xs" style={{ color: "var(--fg-dim)" }}>
-                    <span style={{ color: "#ff4d4f" }}>✕</span> {a}
                   </div>
                 ))}
               </div>

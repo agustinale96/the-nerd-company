@@ -156,6 +156,20 @@ main, section, header, footer, div { position: relative; z-index: 2; }
 }
 .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
 
+/* Services section noise texture */
+.services-texture {
+  background-color: #0d2008;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(
+      -55deg,
+      transparent 0px,
+      transparent 18px,
+      rgba(168,255,60,0.035) 18px,
+      rgba(168,255,60,0.035) 19px
+    );
+}
+
 /* Glitch title */
 @keyframes glitch {
   0%, 82%, 100% { transform: translate(0); text-shadow: none; clip-path: none; }
