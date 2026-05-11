@@ -322,19 +322,12 @@ export default function Home() {
           </div>
           <div style={{ borderTop: "1px solid rgba(168,255,60,0.15)" }}>
             {SERVICES.map((s) => (
-              <div key={s.n} className="gsap-srv-row py-10 flex flex-col md:flex-row gap-8 md:gap-12 md:items-center" style={{ borderBottom: "1px solid rgba(168,255,60,0.15)" }}>
-                {/* Text */}
-                <div className="flex gap-6 flex-1 min-w-0">
-                  <span className="font-mono text-xs pt-1 shrink-0" style={{ color: "rgba(168,255,60,0.35)", minWidth: 24 }}>{s.n}</span>
-                  <div>
-                    <div className="font-display text-4xl sm:text-5xl leading-none mb-3" style={{ color: "var(--fg)" }}>{s.verb}</div>
-                    <h3 className="font-mono text-sm font-bold mb-2 uppercase tracking-wider" style={{ color: "var(--fg-dim)" }}>{s.name}</h3>
-                    <p style={{ color: "rgba(168,255,60,0.45)", fontFamily: "var(--font-space-mono), monospace", fontSize: "0.75rem", lineHeight: 1.7 }}>{s.desc}</p>
-                  </div>
-                </div>
-                {/* Image */}
-                <div className="shrink-0 w-full md:w-72 lg:w-80" style={{ aspectRatio: "4/3", border: "1px solid rgba(168,255,60,0.15)", background: "rgba(0,0,0,0.2)", overflow: "hidden" }}>
-                  <img src={s.img} alt={s.name} style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.8 }} />
+              <div key={s.n} className="gsap-srv-row py-10 flex gap-6" style={{ borderBottom: "1px solid rgba(168,255,60,0.15)" }}>
+                <span className="font-mono text-xs pt-1 shrink-0" style={{ color: "rgba(168,255,60,0.35)", minWidth: 24 }}>{s.n}</span>
+                <div>
+                  <div className="font-display text-4xl sm:text-5xl leading-none mb-3" style={{ color: "var(--fg)" }}>{s.verb}</div>
+                  <h3 className="font-mono text-sm font-bold mb-2 uppercase tracking-wider" style={{ color: "var(--fg-dim)" }}>{s.name}</h3>
+                  <p style={{ color: "rgba(168,255,60,0.45)", fontFamily: "var(--font-space-mono), monospace", fontSize: "0.75rem", lineHeight: 1.7 }}>{s.desc}</p>
                 </div>
               </div>
             ))}
@@ -381,65 +374,81 @@ export default function Home() {
             <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// cómo trabajamos</p>
             <h2 className="gsap-heading font-display text-5xl sm:text-6xl" style={{ color: "var(--fg)" }}>PROCESO</h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {PROCESS.map((p) => (
-              <div key={p.n} className="gsap-proc-card flex flex-col gap-3 p-6"
-                style={{ border: "1px solid var(--border)", background: "rgba(0,0,0,0.3)" }}>
-                <span className="font-mono text-xs" style={{ color: "var(--accent)" }}>{p.n}</span>
-                <h3 className="font-mono text-sm font-bold uppercase tracking-wider" style={{ color: "var(--fg)" }}>{p.name}</h3>
-                <p className="text-xs leading-relaxed" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace", fontSize: "0.72rem" }}>{p.desc}</p>
+          {/* Timeline */}
+          <div className="flex flex-col" style={{ position: "relative" }}>
+            {/* Vertical line */}
+            <div style={{ position: "absolute", left: 11, top: 12, bottom: 12, width: 1, background: "var(--border)" }} />
+            {PROCESS.map((p, i) => (
+              <div key={p.n} className="gsap-proc-card flex gap-6 pb-10" style={{ position: "relative" }}>
+                {/* Dot */}
+                <div style={{ width: 23, height: 23, borderRadius: "50%", background: "var(--bg-alt)", border: "1px solid var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, zIndex: 1 }}>
+                  <div style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--accent)" }} />
+                </div>
+                {/* Content */}
+                <div className="flex flex-col gap-2 pt-0.5" style={{ paddingBottom: i < PROCESS.length - 1 ? 0 : 0 }}>
+                  <div className="flex items-center gap-3">
+                    <span className="font-mono text-xs" style={{ color: "var(--accent)" }}>{p.n}</span>
+                    <h3 className="font-mono text-sm font-bold uppercase tracking-wider" style={{ color: "var(--fg)" }}>{p.name}</h3>
+                  </div>
+                  <p style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace", fontSize: "0.72rem", lineHeight: 1.7, maxWidth: 520 }}>{p.desc}</p>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── STACK ── */}
-      <section id="stack" className="px-6 py-24" style={{ borderTop: "1px solid var(--border)" }}>
-        <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-10">
-          <div>
-            <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// tecnologías</p>
-            <h2 className="gsap-heading font-display text-5xl sm:text-6xl" style={{ color: "var(--fg)" }}>NUESTRO STACK</h2>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {STACK.map((t) => <span key={t} className="gsap-stack-tag tech-tag">{t}</span>)}
-          </div>
-          <p id="stack-desc" className="text-xs leading-relaxed" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace", maxWidth: 480 }}>
-            Herramientas probadas que permiten moverse rápido sin sacrificar estabilidad. Nada de hype tecnológico sin propósito.
-          </p>
-        </div>
-      </section>
+      {/* ── STACK + QUIÉNES SOMOS ── */}
+      <section id="quienes-somos" className="px-6 py-24" style={{ borderTop: "1px solid var(--border)" }}>
+        <div className="w-full max-w-[1200px] mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
 
-      {/* ── WHO WE ARE ── */}
-      <section id="quienes-somos" className="px-6 py-24" style={{ background: "var(--bg-alt)", borderTop: "1px solid var(--border)" }}>
-        <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-12">
-          <div>
-            <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// quiénes somos</p>
-            <h2 className="gsap-heading font-display text-5xl sm:text-6xl leading-none" style={{ color: "var(--fg)" }}>
-              NO SOMOS UNA <span className="highlight-bar">AGENCIA DE IA.</span>
-            </h2>
-          </div>
-          <p id="quienes-body" className="text-xs leading-relaxed" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace", maxWidth: 520 }}>
-            Somos un equipo técnico chico y obsesionado con el resultado. Trabajamos con pocos proyectos para poder ir a fondo en cada uno. No vendemos soluciones genéricas — construimos ventaja competitiva real.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3" style={{ maxWidth: 520 }}>
-            {[
-              { name: "Agustín Ale",        role: "Co-founder" },
-              { name: "Cristóbal Cantolla",  role: "Co-founder" },
-            ].map((f) => (
-              <div key={f.name} className="flex flex-col gap-1 p-4" style={{ border: "1px solid var(--border)", background: "rgba(0,0,0,0.3)" }}>
-                <span className="font-mono text-xs font-bold" style={{ color: "var(--fg)" }}>{f.name}</span>
-                <span className="font-mono text-xs uppercase tracking-widest" style={{ color: "var(--accent)", fontSize: "0.6rem" }}>{f.role}</span>
+            {/* Col izquierda: Stack */}
+            <div id="stack" className="flex flex-col gap-8">
+              <div>
+                <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// tecnologías</p>
+                <h2 className="gsap-heading font-display text-4xl sm:text-5xl" style={{ color: "var(--fg)" }}>NUESTRO STACK</h2>
               </div>
-            ))}
-          </div>
-          <div className="flex flex-col gap-3">
-            <p className="gsap-label font-mono text-xs uppercase tracking-widest" style={{ color: "var(--fg-muted)" }}>// lo que evitamos</p>
-            {AVOID.map((a, i) => (
-              <div key={i} className="gsap-avoid-item flex items-center gap-3 font-mono text-xs" style={{ color: "var(--fg-dim)" }}>
-                <span style={{ color: "#ff4d4f" }}>✕</span> {a}
+              <div className="flex flex-wrap gap-2">
+                {STACK.map((t) => <span key={t} className="gsap-stack-tag tech-tag">{t}</span>)}
               </div>
-            ))}
+              <p id="stack-desc" className="text-xs leading-relaxed" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace" }}>
+                Herramientas probadas que permiten moverse rápido sin sacrificar estabilidad. Nada de hype tecnológico sin propósito.
+              </p>
+            </div>
+
+            {/* Col derecha: Quiénes somos */}
+            <div className="flex flex-col gap-8">
+              <div>
+                <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// quiénes somos</p>
+                <h2 className="gsap-heading font-display text-4xl sm:text-5xl leading-none" style={{ color: "var(--fg)" }}>
+                  NO SOMOS UNA <span className="highlight-bar">AGENCIA DE IA.</span>
+                </h2>
+              </div>
+              <p id="quienes-body" className="text-xs leading-relaxed" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace" }}>
+                Somos un equipo técnico chico y obsesionado con el resultado. Trabajamos con pocos proyectos para poder ir a fondo en cada uno. No vendemos soluciones genéricas — construimos ventaja competitiva real.
+              </p>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { name: "Agustín Ale",       role: "Co-founder" },
+                  { name: "Cristóbal Cantolla", role: "Co-founder" },
+                ].map((f) => (
+                  <div key={f.name} className="flex flex-col gap-1 p-4" style={{ border: "1px solid var(--border)", background: "rgba(0,0,0,0.3)" }}>
+                    <span className="font-mono text-xs font-bold" style={{ color: "var(--fg)" }}>{f.name}</span>
+                    <span className="font-mono text-xs uppercase tracking-widest" style={{ color: "var(--accent)", fontSize: "0.6rem" }}>{f.role}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex flex-col gap-3">
+                <p className="gsap-label font-mono text-xs uppercase tracking-widest" style={{ color: "var(--fg-muted)" }}>// lo que evitamos</p>
+                {AVOID.map((a, i) => (
+                  <div key={i} className="gsap-avoid-item flex items-center gap-3 font-mono text-xs" style={{ color: "var(--fg-dim)" }}>
+                    <span style={{ color: "#ff4d4f" }}>✕</span> {a}
+                  </div>
+                ))}
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
