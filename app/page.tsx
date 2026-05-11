@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import GsapAnimations from "./components/GsapAnimations";
+import Link from "next/link";
 
 /* ─── Data ──────────────────────────────────────────────────── */
 const NAV_LINKS = [
@@ -218,9 +219,9 @@ export default function Home() {
             </button>
           ))}
         </nav>
-        <button onClick={copyEmail} className="hidden md:block btn-ghost text-xs" style={{ padding: "6px 16px" }}>
-          {copied ? "copiado ✓" : "> contacto"}
-        </button>
+        <Link href="/contacto" className="hidden md:block btn-primary text-xs" style={{ padding: "6px 16px" }}>
+          &gt; contacto
+        </Link>
         <button className="md:hidden font-mono text-sm" style={{ color: "var(--fg-dim)" }} onClick={() => setMenuOpen(!menuOpen)}>
           {menuOpen ? "[✕]" : "[☰]"}
         </button>
@@ -300,7 +301,7 @@ export default function Home() {
               Cada decisión con datos, cada interacción más inteligente, cada producto más competitivo.
             </p>
           </div>
-          <div id="globe-wrap" className="w-full aspect-square max-w-xs mx-auto">
+          <div id="globe-wrap" className="w-full aspect-square max-w-md mx-auto">
             <Globe />
           </div>
         </div>
@@ -330,8 +331,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── PROJECTS ── */}
-      <section id="proyectos" className="px-6 py-24">
+      {/* ── PROJECTS ── (oculto hasta tener casos reales) */}
+      <section id="proyectos" className="px-6 py-24 hidden">
         <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-12">
           <div>
             <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// proyectos anteriores</p>
