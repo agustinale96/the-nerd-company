@@ -241,13 +241,11 @@ export default function Home() {
           </div>
 
           <h1 className="font-display text-6xl sm:text-7xl md:text-8xl leading-none" style={{ color: "var(--fg)" }}>
-            AUTOMATIZAMOS<br />
-            <span className="highlight-bar">TUS PROCESOS.</span><span className="cursor" />
+            AUTOMATIZAMOS <span className="highlight-bar">TUS PROCESOS.</span><span className="cursor" />
           </h1>
 
           <p className="text-sm sm:text-base leading-relaxed max-w-xl" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace" }}>
-            Diseñamos y desarrollamos sistemas que trabajan solos.<br />
-            Para equipos y fundadores obsesionados con hacer más con menos.
+            Diseñamos y desarrollamos sistemas que trabajan solos. Para equipos y fundadores obsesionados con hacer más con menos.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 mt-2">
@@ -272,7 +270,7 @@ export default function Home() {
           <div data-reveal className="flex flex-col gap-4">
             <p className="font-mono text-xs" style={{ color: "var(--fg-dim)" }}>// insight</p>
             <blockquote className="font-display text-4xl sm:text-5xl leading-tight" style={{ color: "var(--fg)" }}>
-              "Los mejores<br />sistemas trabajan<br /><span className="highlight-bar">mientras dormís."</span>
+              "Los mejores sistemas trabajan <span className="highlight-bar">mientras dormís."</span>
             </blockquote>
             <p className="text-xs" style={{ color: "var(--fg-muted)", fontFamily: "var(--font-space-mono), monospace" }}>
               Un proceso manual es deuda técnica disfrazada.
@@ -313,7 +311,7 @@ export default function Home() {
         <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-12">
           <div data-reveal>
             <p className="font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// proyectos anteriores</p>
-            <h2 className="font-display text-5xl sm:text-6xl" style={{ color: "var(--fg)" }}>PRODUCTOS<br />QUE CONSTRUIMOS</h2>
+            <h2 className="font-display text-5xl sm:text-6xl" style={{ color: "var(--fg)" }}>PRODUCTOS QUE CONSTRUIMOS</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {PROJECTS.map((p, i) => (
@@ -379,8 +377,7 @@ export default function Home() {
           <div data-reveal>
             <p className="font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// quiénes somos</p>
             <h2 className="font-display text-5xl sm:text-6xl leading-none" style={{ color: "var(--fg)" }}>
-              NO SOMOS UNA<br />
-              <span className="highlight-bar">SOFTWARE FACTORY.</span>
+              NO SOMOS UNA <span className="highlight-bar">SOFTWARE FACTORY.</span>
             </h2>
           </div>
           <p data-reveal data-delay="100" className="text-xs leading-relaxed" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace", maxWidth: 520 }}>
@@ -411,7 +408,7 @@ export default function Home() {
               <div data-reveal>
                 <p className="font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// iniciar proyecto</p>
                 <h2 className="font-display text-5xl sm:text-6xl leading-none" style={{ color: "var(--fg)" }}>
-                  ¿QUÉ QUERÉS<br /><span className="cursor">AUTOMATIZAR?</span>
+                  ¿QUÉ QUERÉS <span className="cursor">AUTOMATIZAR?</span>
                 </h2>
               </div>
 
