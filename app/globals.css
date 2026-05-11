@@ -17,6 +17,9 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: auto; }
 
+body { transition: padding-right 0.35s cubic-bezier(0.16,1,0.3,1); }
+body.chat-open { padding-right: 360px; }
+
 body {
   background: var(--bg);
   color: var(--fg);

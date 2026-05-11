@@ -32,6 +32,16 @@ export default function ChatPanel() {
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  /* Sync body class with panel open state */
+  useEffect(() => {
+    if (visible && open) {
+      document.body.classList.add("chat-open");
+    } else {
+      document.body.classList.remove("chat-open");
+    }
+    return () => document.body.classList.remove("chat-open");
+  }, [visible, open]);
+
   /* Trigger on hero exit */
   useEffect(() => {
     const hero = document.getElementById("hero");
