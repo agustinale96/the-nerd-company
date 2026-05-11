@@ -7,7 +7,6 @@ import Link from "next/link";
 /* ─── Data ──────────────────────────────────────────────────── */
 const NAV_LINKS = [
   { label: "Servicios",     href: "#servicios" },
-  { label: "Proyectos",     href: "#proyectos" },
   { label: "Proceso",       href: "#proceso" },
   { label: "Quiénes somos", href: "#quienes-somos" },
 ];
@@ -87,7 +86,7 @@ type FormStatus = "idle" | "loading" | "success" | "error";
 /* ─── Inline SVG: Wireframe Globe ─── */
 function Globe() {
   return (
-    <svg viewBox="0 0 400 400" fill="none" className="w-full h-full opacity-60" style={{ color: "var(--fg-dim)" }}>
+    <svg viewBox="0 0 400 400" fill="none" className="w-full h-full" style={{ color: "var(--fg-dim)" }}>
       <circle cx="200" cy="200" r="178" stroke="currentColor" strokeWidth="1" />
       <ellipse cx="200" cy="200" rx="178" ry="60" stroke="currentColor" strokeWidth="0.6" />
       <ellipse cx="200" cy="200" rx="178" ry="115" stroke="currentColor" strokeWidth="0.6" />
@@ -293,7 +292,8 @@ export default function Home() {
           <div id="quote-text" className="flex flex-col gap-4">
             <p className="gsap-label font-mono text-xs" style={{ color: "var(--fg-dim)" }}>// insight</p>
             <blockquote className="font-display text-4xl sm:text-5xl leading-tight" style={{ color: "var(--fg)" }}>
-              "La IA no reemplaza tu marca — <span className="highlight-bar">la hace imbatible."</span>
+              "La IA no reemplaza tu marca —<br />
+              <span className="highlight-bar">la hace imbatible."</span>
             </blockquote>
             <p className="text-xs" style={{ color: "var(--fg-muted)", fontFamily: "var(--font-space-mono), monospace" }}>
               Cada decisión con datos, cada interacción más inteligente, cada producto más competitivo.
@@ -406,6 +406,17 @@ export default function Home() {
           <p id="quienes-body" className="text-xs leading-relaxed" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace", maxWidth: 520 }}>
             Somos un equipo técnico chico y obsesionado con el resultado. Trabajamos con pocos proyectos para poder ir a fondo en cada uno. No vendemos soluciones genéricas — construimos ventaja competitiva real.
           </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3" style={{ maxWidth: 520 }}>
+            {[
+              { name: "Agustín Ale",        role: "Co-founder" },
+              { name: "Cristóbal Cantolla",  role: "Co-founder" },
+            ].map((f) => (
+              <div key={f.name} className="flex flex-col gap-1 p-4" style={{ border: "1px solid var(--border)", background: "rgba(0,0,0,0.3)" }}>
+                <span className="font-mono text-xs font-bold" style={{ color: "var(--fg)" }}>{f.name}</span>
+                <span className="font-mono text-xs uppercase tracking-widest" style={{ color: "var(--accent)", fontSize: "0.6rem" }}>{f.role}</span>
+              </div>
+            ))}
+          </div>
           <div className="flex flex-col gap-3">
             <p className="gsap-label font-mono text-xs uppercase tracking-widest" style={{ color: "var(--fg-muted)" }}>// lo que evitamos</p>
             {AVOID.map((a, i) => (

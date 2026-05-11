@@ -69,18 +69,6 @@ export default function GsapAnimations() {
         });
       }
 
-      /* ── 8. Globe parallax ── */
-      gsap.to("#globe-wrap", {
-        y: -90,
-        ease: "none",
-        scrollTrigger: {
-          trigger: "#globe-wrap",
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 2,
-        },
-      });
-
       /* ── 9. Quote section ── */
       gsap.from("#quote-text", {
         y: 28,
