@@ -19,6 +19,7 @@ export default function ChatPanel() {
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
+  const [leadSaved, setLeadSaved] = useState(false);
   const seqDone = useRef(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -105,6 +106,7 @@ export default function ChatPanel() {
         body: JSON.stringify({ message: text, history }),
       });
       if (!res.body) throw new Error("no body");
+      const captured_lead = res.headers.get("X-Lead-Captured") === "true";
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
       let accumulated = "";
@@ -124,6 +126,7 @@ export default function ChatPanel() {
         next[next.length - 1] = { role: "assistant", text: accumulated, streaming: false };
         return next;
       });
+      if (captured_lead) setLeadSaved(true);
     } catch {
       setMsgs((prev) => {
         const next = [...prev];
@@ -224,6 +227,22 @@ export default function ChatPanel() {
             }}
           >×</button>
         </div>
+
+        {/* Lead captured banner */}
+        {leadSaved && (
+          <div style={{
+            padding: "8px 16px",
+            background: "rgba(168,255,60,0.08)",
+            borderBottom: "1px solid var(--border)",
+            fontFamily: "var(--font-space-mono), monospace",
+            fontSize: "0.65rem",
+            color: "var(--accent)",
+            letterSpacing: "0.08em",
+            flexShrink: 0,
+          }}>
+            ✓ lead guardado — el equipo te contacta pronto
+          </div>
+        )}
 
         {/* Messages */}
         <div style={{
