@@ -10,7 +10,14 @@ interface Msg {
 const INTRO_SEQUENCE = [
   { text: "wake up neo...", delay: 50 },
   { pause: 700 },
-  { text: "¿qué estás buscando descubrir?", delay: 38 },
+  { text: "contanos sobre tu producto, ¿qué estás buscando potenciar?", delay: 38 },
+];
+
+const QUICK_OPTIONS = [
+  "Producto digital",
+  "Servicio / proceso interno",
+  "E-commerce",
+  "Otro",
 ];
 
 export default function ChatPanel() {
@@ -20,6 +27,7 @@ export default function ChatPanel() {
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [leadSaved, setLeadSaved] = useState(false);
+  const [showOptions, setShowOptions] = useState(false);
   const seqDone = useRef(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -76,6 +84,7 @@ export default function ChatPanel() {
       });
       msgIndex++;
     }
+    setShowOptions(true);
     inputRef.current?.focus();
   }
 
@@ -83,10 +92,10 @@ export default function ChatPanel() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [msgs]);
 
-  const send = useCallback(async () => {
-    const text = input.trim();
+  const sendText = useCallback(async (text: string) => {
     if (!text || busy) return;
     setInput("");
+    setShowOptions(false);
     setBusy(true);
 
     const history = msgs
@@ -137,7 +146,9 @@ export default function ChatPanel() {
       setBusy(false);
       inputRef.current?.focus();
     }
-  }, [input, busy, msgs]);
+  }, [busy, msgs]);
+
+  const send = useCallback(() => sendText(input.trim()), [sendText, input]);
 
   const onKey = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }
@@ -288,6 +299,52 @@ export default function ChatPanel() {
           ))}
           <div ref={bottomRef} />
         </div>
+
+        {/* Quick options */}
+        {showOptions && (
+          <div style={{
+            padding: "0 16px 12px",
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 6,
+            flexShrink: 0,
+          }}>
+            {QUICK_OPTIONS.map((opt) => (
+              <button
+                key={opt}
+                onClick={() => {
+                  if (opt === "Otro") {
+                    setShowOptions(false);
+                    inputRef.current?.focus();
+                  } else {
+                    sendText(opt);
+                  }
+                }}
+                style={{
+                  background: "rgba(168,255,60,0.05)",
+                  border: "1px solid var(--border)",
+                  color: "var(--fg-dim)",
+                  fontFamily: "var(--font-space-mono), monospace",
+                  fontSize: "0.65rem",
+                  padding: "5px 10px",
+                  cursor: "pointer",
+                  letterSpacing: "0.05em",
+                  transition: "color 0.15s, border-color 0.15s",
+                }}
+                onMouseEnter={(e) => {
+                  (e.target as HTMLButtonElement).style.color = "var(--fg)";
+                  (e.target as HTMLButtonElement).style.borderColor = "rgba(168,255,60,0.4)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.target as HTMLButtonElement).style.color = "var(--fg-dim)";
+                  (e.target as HTMLButtonElement).style.borderColor = "var(--border)";
+                }}
+              >
+                {opt}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Input */}
         <div style={{
