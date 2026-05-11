@@ -1,96 +1,20 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import GsapAnimations from "./components/GsapAnimations";
 import ChatPanel from "./components/ChatPanel";
 import Link from "next/link";
-
-/* ─── Data ──────────────────────────────────────────────────── */
-const NAV_LINKS = [
-  { label: "Servicios",     href: "#servicios" },
-  { label: "Proceso",       href: "#proceso" },
-  { label: "Quiénes somos", href: "#quienes-somos" },
-];
-
-const SERVICES = [
-  {
-    n: "01",
-    verb: "INTEGRAR",
-    name: "IA aplicada a tu producto",
-    desc: "Incorporamos inteligencia artificial donde más impacto tiene en tu negocio. Desde recomendaciones personalizadas hasta decisiones automatizadas que escalan con vos.",
-    img: "/service-placeholder.svg",
-  },
-  {
-    n: "02",
-    verb: "CONSTRUIR",
-    name: "Productos digitales con IA integrada",
-    desc: "Construimos productos que aprenden. MVPs y plataformas con IA integrada desde el primer sprint — no como feature, sino como núcleo del negocio.",
-    img: "/service-placeholder.svg",
-  },
-  {
-    n: "03",
-    verb: "OPTIMIZAR",
-    name: "Estrategia e integración de IA",
-    desc: "Te ayudamos a entender dónde la IA genera ventaja real en tu contexto — y lo construimos. Sin hype, sin soluciones genéricas. Con tu stack, tus datos, tu lógica.",
-    img: "/service-placeholder.svg",
-  },
-];
-
-const PROJECTS = [
-  {
-    tag:  "Automatización",
-    name: "AutoOps",
-    desc: "Plataforma de automatización de operaciones para e-commerce. Redujo tiempo manual de seguimiento de órdenes un 80%.",
-    stack: ["Next.js", "Node.js", "PostgreSQL", "Zapier API"],
-    year: "2024",
-  },
-  {
-    tag:  "Integración",
-    name: "FlowSync",
-    desc: "Sistema de notificaciones y workflows automáticos integrando Slack, HubSpot y Notion para equipo de ventas de SaaS B2B.",
-    stack: ["TypeScript", "Redis", "Webhooks", "Slack API"],
-    year: "2024",
-  },
-  {
-    tag:  "Dashboard",
-    name: "CommandCenter",
-    desc: "Dashboard interno de métricas y alertas en tiempo real para equipo de operaciones. Reemplazó 4 hojas de cálculo manuales.",
-    stack: ["React", "Supabase", "Vercel", "Recharts"],
-    year: "2023",
-  },
-];
-
-const PROCESS = [
-  { n: "01", name: "Diagnóstico",  desc: "Mapeamos tus procesos actuales, identificamos los cuellos de botella y los puntos de automatización con mayor impacto." },
-  { n: "02", name: "Diseño",       desc: "Diseñamos la solución antes de escribir código. Prototipo, validación y aprobación antes de avanzar." },
-  { n: "03", name: "Construcción", desc: "Desarrollo iterativo con entregas semanales. Cada sprint agrega valor real, no promesas." },
-  { n: "04", name: "Escala",       desc: "Monitoreamos, optimizamos y expandimos. Los sistemas mejoran con el tiempo y los datos." },
-];
+import { T, type Lang } from "./lib/i18n";
 
 const STACK = ["React", "Next.js", "TypeScript", "Node.js", "PostgreSQL", "Supabase", "Redis", "AWS", "Vercel", "Figma", "Docker", "n8n", "Make", "Zapier"];
-
-const AVOID = [
-  "IA como cosmética (un chatbot que nadie usa)",
-  "Promesas de transformación sin resultados medibles",
-  "Soluciones de caja negra que no podés escalar",
-  "Proyectos eternos que nunca llegan a producción",
-  "Deuda técnica disfrazada de innovación",
-];
-
-const FORM_STEPS = [
-  { id: 1, label: "Nombre",  placeholder: "Juan García",       type: "text"     as const },
-  { id: 2, label: "Email",   placeholder: "juan@empresa.com",  type: "email"    as const },
-  { id: 3, label: "Empresa", placeholder: "Acme Inc.",         type: "text"     as const },
-  { id: 4, label: "Mensaje", placeholder: "¿Qué querés automatizar?", type: "textarea" as const },
-];
-
 const CONTACT_EMAIL = "hellothere@thenerdcompany.com";
-
-const MARQUEE_WORDS = ["POTENCIAMOS", "▸", "CONSTRUIMOS", "▸", "ESCALAMOS", "▸", "DIFERENCIAMOS", "▸", "INTEGRAMOS", "▸", "EVOLUCIONAMOS", "▸"];
+const FOUNDERS = [
+  { name: "Agustín Ale",       role: "Co-founder" },
+  { name: "Cristóbal Cantolla", role: "Co-founder" },
+];
 
 type FormStatus = "idle" | "loading" | "success" | "error";
 
-/* ─── Inline SVG: Wireframe Globe ─── */
 function Globe() {
   return (
     <svg viewBox="0 0 400 400" fill="none" className="w-full h-full" style={{ color: "var(--fg-dim)" }}>
@@ -111,8 +35,8 @@ function Globe() {
   );
 }
 
-/* ─── Page ──────────────────────────────────────────────────── */
 export default function Home() {
+  const [lang, setLang]             = useState<Lang>("es");
   const [step, setStep]             = useState(0);
   const [values, setValues]         = useState(["", "", "", ""]);
   const [formStatus, setFormStatus] = useState<FormStatus>("idle");
@@ -122,9 +46,27 @@ export default function Home() {
   const [menuOpen, setMenuOpen]     = useState(false);
   const inputRef                    = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
 
-  const current = FORM_STEPS[step];
-  const isLast  = step === FORM_STEPS.length - 1;
+  useEffect(() => {
+    const saved = localStorage.getItem("tnc-lang") as Lang | null;
+    if (saved && saved in T) setLang(saved);
+  }, []);
+
+  function switchLang(l: Lang) {
+    setLang(l);
+    localStorage.setItem("tnc-lang", l);
+  }
+
+  const t = T[lang];
+  const formSteps = t.contact.steps;
+  const current = formSteps[step];
+  const isLast  = step === formSteps.length - 1;
   const value   = values[step];
+
+  const NAV_LINKS = [
+    { label: t.nav.services, href: "#servicios" },
+    { label: t.nav.process,  href: "#proceso" },
+    { label: t.nav.about,    href: "#quienes-somos" },
+  ];
 
   function scrollTo(id: string) {
     document.querySelector(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -138,9 +80,9 @@ export default function Home() {
 
   function validate(): boolean {
     const v = value.trim();
-    if (!v) { setErrorMsg("Este campo es requerido."); setFormStatus("error"); return false; }
+    if (!v) { setErrorMsg(t.contact.error_required); setFormStatus("error"); return false; }
     if (step === 1 && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
-      setErrorMsg("Email inválido."); setFormStatus("error"); return false;
+      setErrorMsg(t.contact.error_email); setFormStatus("error"); return false;
     }
     return true;
   }
@@ -166,7 +108,7 @@ export default function Home() {
       transition(() => setFormStatus("success"));
     } catch {
       setFormStatus("error");
-      setErrorMsg("Algo salió mal. Intentá de nuevo.");
+      setErrorMsg(t.contact.error_submit);
     }
   }
 
@@ -188,7 +130,8 @@ export default function Home() {
     outline: "none",
   };
 
-  /* ─── Render ─────────────────────────────────────────────── */
+  const LANGS: Lang[] = ["es", "en", "pt"];
+
   return (
     <div className="flex flex-col">
 
@@ -196,20 +139,7 @@ export default function Home() {
       <ChatPanel />
 
       {/* ── SCROLL PROGRESS BAR ── */}
-      <div
-        id="gsap-progress"
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          height: 2,
-          width: "100%",
-          background: "var(--accent)",
-          transformOrigin: "left center",
-          transform: "scaleX(0)",
-          zIndex: 9997,
-        }}
-      />
+      <div id="gsap-progress" style={{ position: "fixed", top: 0, left: 0, height: 2, width: "100%", background: "var(--accent)", transformOrigin: "left center", transform: "scaleX(0)", zIndex: 9997 }} />
 
       {/* ── HEADER ── */}
       <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4"
@@ -226,9 +156,27 @@ export default function Home() {
             </button>
           ))}
         </nav>
-        <Link href="/contacto" className="hidden md:block btn-primary text-xs" style={{ padding: "6px 16px" }}>
-          &gt; contacto
-        </Link>
+        <div className="hidden md:flex items-center gap-3">
+          {/* Language switcher */}
+          <div className="flex items-center" style={{ border: "1px solid var(--border)" }}>
+            {LANGS.map((l) => (
+              <button key={l} onClick={() => switchLang(l)}
+                className="font-mono text-xs uppercase"
+                style={{
+                  padding: "4px 8px",
+                  color: lang === l ? "var(--bg)" : "var(--fg-muted)",
+                  background: lang === l ? "var(--accent)" : "transparent",
+                  transition: "background 0.15s, color 0.15s",
+                  letterSpacing: "0.05em",
+                }}>
+                {l}
+              </button>
+            ))}
+          </div>
+          <Link href="/contacto" className="btn-primary text-xs" style={{ padding: "6px 16px" }}>
+            {t.nav.cta}
+          </Link>
+        </div>
         <button className="md:hidden font-mono text-sm" style={{ color: "var(--fg-dim)" }} onClick={() => setMenuOpen(!menuOpen)}>
           {menuOpen ? "[✕]" : "[☰]"}
         </button>
@@ -242,33 +190,34 @@ export default function Home() {
               {l.label}
             </button>
           ))}
+          <div className="flex items-center gap-2 mt-4">
+            {LANGS.map((l) => (
+              <button key={l} onClick={() => { switchLang(l); setMenuOpen(false); }}
+                className="font-mono text-sm uppercase"
+                style={{ padding: "6px 14px", color: lang === l ? "var(--bg)" : "var(--fg-muted)", background: lang === l ? "var(--accent)" : "transparent", border: "1px solid var(--border)" }}>
+                {l}
+              </button>
+            ))}
+          </div>
         </div>
       )}
 
       {/* ── HERO ── */}
       <section id="hero" className="min-h-[80vh] flex flex-col items-center justify-center px-6 pt-24 pb-16">
-
         <div className="page-in w-full max-w-[1200px] mx-auto flex flex-col items-center text-center gap-8">
-
           <div id="hero-prompt" className="font-mono text-xs" style={{ color: "var(--fg-dim)" }}>
-            <span style={{ color: "var(--accent)" }}>$</span> whoami — The Nerd Company v1.0
+            <span style={{ color: "var(--accent)" }}>$</span> {t.hero.prompt.replace("$ ", "")}
           </div>
-
           <h1 id="hero-h1" className="font-display text-6xl sm:text-7xl md:text-8xl leading-none" style={{ color: "var(--fg)" }}>
-            TU PRODUCTO,<br />
-            <span className="highlight-bar">POTENCIADO CON IA.</span><span className="cursor" />
+            {t.hero.h1_1}<br />
+            <span className="highlight-bar">{t.hero.h1_2}</span><span className="cursor" />
           </h1>
-
           <p id="hero-sub" className="text-sm sm:text-base leading-relaxed max-w-xl" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace" }}>
-            Construimos la inteligencia detrás de tu marca. Para equipos y fundadores que quieren crecer sin perder el control.
+            {t.hero.sub}
           </p>
-
           <div id="hero-btns" className="flex flex-col sm:flex-row gap-3 mt-2 justify-center">
-            <button onClick={() => scrollTo("#contacto")} className="btn-primary">
-              Explorá cómo aplicamos IA →
-            </button>
+            <button onClick={() => scrollTo("#contacto")} className="btn-primary">{t.hero.cta}</button>
           </div>
-
         </div>
       </section>
 
@@ -277,15 +226,9 @@ export default function Home() {
         <div id="gsap-marquee-inner" className="flex whitespace-nowrap" style={{ willChange: "transform" }}>
           {[0, 1].map((copy) => (
             <div key={copy} className="flex items-center shrink-0">
-              {MARQUEE_WORDS.map((w, j) => (
-                <span
-                  key={`${copy}-${j}`}
-                  className="font-mono text-xs uppercase tracking-widest shrink-0"
-                  style={{
-                    color: w === "▸" ? "var(--accent)" : "var(--fg-dim)",
-                    padding: "0 20px",
-                  }}
-                >
+              {t.marquee.map((w, j) => (
+                <span key={`${copy}-${j}`} className="font-mono text-xs uppercase tracking-widest shrink-0"
+                  style={{ color: w === "▸" ? "var(--accent)" : "var(--fg-dim)", padding: "0 20px" }}>
                   {w}
                 </span>
               ))}
@@ -294,22 +237,20 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ── QUOTE: phrase + globe ── */}
+      {/* ── QUOTE ── */}
       <section style={{ background: "var(--bg-alt)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
         <div className="w-full max-w-[1200px] mx-auto px-6 py-20 flex flex-col items-center gap-10 text-center">
           <div id="quote-text" className="flex flex-col items-center gap-4">
-            <p className="gsap-label font-mono text-xs" style={{ color: "var(--fg-dim)" }}>// insight</p>
+            <p className="gsap-label font-mono text-xs" style={{ color: "var(--fg-dim)" }}>{t.quote.label}</p>
             <blockquote className="font-display text-4xl sm:text-5xl leading-tight" style={{ color: "var(--fg)" }}>
-              "La IA no reemplaza tu marca —<br />
-              <span className="highlight-bar">la hace imbatible."</span>
+              {t.quote.text}<br />
+              <span className="highlight-bar">{t.quote.highlight}</span>
             </blockquote>
             <p className="text-xs" style={{ color: "var(--fg-muted)", fontFamily: "var(--font-space-mono), monospace" }}>
-              Cada decisión con datos, cada interacción más inteligente, cada producto más competitivo.
+              {t.quote.sub}
             </p>
           </div>
-          <div id="globe-wrap" className="w-72 h-72">
-            <Globe />
-          </div>
+          <div id="globe-wrap" className="w-72 h-72"><Globe /></div>
         </div>
       </section>
 
@@ -317,11 +258,11 @@ export default function Home() {
       <section id="servicios" className="services-texture px-6 py-24">
         <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-12">
           <div>
-            <p className="gsap-label font-mono text-xs mb-3" style={{ color: "rgba(168,255,60,0.4)" }}>// servicios</p>
-            <h2 className="gsap-heading glitch-title font-display text-5xl sm:text-6xl" style={{ color: "var(--accent)" }}>LO QUE HACEMOS</h2>
+            <p className="gsap-label font-mono text-xs mb-3" style={{ color: "rgba(168,255,60,0.4)" }}>{t.services.label}</p>
+            <h2 className="gsap-heading glitch-title font-display text-5xl sm:text-6xl" style={{ color: "var(--accent)" }}>{t.services.heading}</h2>
           </div>
           <div style={{ borderTop: "1px solid rgba(168,255,60,0.15)" }}>
-            {SERVICES.map((s) => (
+            {t.services.items.map((s) => (
               <div key={s.n} className="gsap-srv-row py-10 flex gap-6" style={{ borderBottom: "1px solid rgba(168,255,60,0.15)" }}>
                 <span className="font-mono text-xs pt-1 shrink-0" style={{ color: "rgba(168,255,60,0.35)", minWidth: 24 }}>{s.n}</span>
                 <div>
@@ -333,36 +274,7 @@ export default function Home() {
             ))}
           </div>
           <div>
-            <button onClick={() => scrollTo("#contacto")} className="btn-primary">Hablemos de tu producto →</button>
-          </div>
-        </div>
-      </section>
-
-      {/* ── PROJECTS ── (oculto hasta tener casos reales) */}
-      <section id="proyectos" className="px-6 py-24 hidden">
-        <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-12">
-          <div>
-            <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// proyectos anteriores</p>
-            <h2 className="gsap-heading font-display text-5xl sm:text-6xl" style={{ color: "var(--fg)" }}>PRODUCTOS QUE POTENCIAMOS</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {PROJECTS.map((p) => (
-              <div key={p.name}
-                className="gsap-proj-card flex flex-col gap-4 p-6"
-                style={{ border: "1px solid var(--border)", background: "rgba(0,0,0,0.3)" }}>
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs uppercase" style={{ color: "var(--accent)", fontSize: "0.65rem" }}>{p.tag}</span>
-                  <span className="font-mono text-xs" style={{ color: "var(--fg-muted)", fontSize: "0.65rem" }}>{p.year}</span>
-                </div>
-                <h3 className="font-display text-3xl" style={{ color: "var(--fg)" }}>{p.name}</h3>
-                <p className="text-xs leading-relaxed flex-1" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace", fontSize: "0.7rem" }}>{p.desc}</p>
-                <div className="flex flex-wrap gap-1 mt-auto pt-2" style={{ borderTop: "1px solid var(--border)" }}>
-                  {p.stack.map((t) => (
-                    <span key={t} className="font-mono" style={{ fontSize: "0.6rem", color: "var(--fg-muted)", padding: "2px 6px", border: "1px solid var(--border)" }}>{t}</span>
-                  ))}
-                </div>
-              </div>
-            ))}
+            <button onClick={() => scrollTo("#contacto")} className="btn-primary">{t.services.cta}</button>
           </div>
         </div>
       </section>
@@ -371,21 +283,17 @@ export default function Home() {
       <section id="proceso" className="px-6 py-24" style={{ background: "var(--bg-alt)", borderTop: "1px solid var(--border)" }}>
         <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-12">
           <div>
-            <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// cómo trabajamos</p>
-            <h2 className="gsap-heading font-display text-5xl sm:text-6xl" style={{ color: "var(--fg)" }}>PROCESO</h2>
+            <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>{t.process.label}</p>
+            <h2 className="gsap-heading font-display text-5xl sm:text-6xl" style={{ color: "var(--fg)" }}>{t.process.heading}</h2>
           </div>
-          {/* Timeline */}
           <div className="flex flex-col" style={{ position: "relative" }}>
-            {/* Vertical line */}
             <div style={{ position: "absolute", left: 11, top: 12, bottom: 12, width: 1, background: "var(--border)" }} />
-            {PROCESS.map((p, i) => (
+            {t.process.items.map((p) => (
               <div key={p.n} className="gsap-proc-card flex gap-6 pb-10" style={{ position: "relative" }}>
-                {/* Dot */}
                 <div style={{ width: 23, height: 23, borderRadius: "50%", background: "var(--bg-alt)", border: "1px solid var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, zIndex: 1 }}>
                   <div style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--accent)" }} />
                 </div>
-                {/* Content */}
-                <div className="flex flex-col gap-2 pt-0.5" style={{ paddingBottom: i < PROCESS.length - 1 ? 0 : 0 }}>
+                <div className="flex flex-col gap-2 pt-0.5">
                   <div className="flex items-center gap-3">
                     <span className="font-mono text-xs" style={{ color: "var(--accent)" }}>{p.n}</span>
                     <h3 className="font-mono text-sm font-bold uppercase tracking-wider" style={{ color: "var(--fg)" }}>{p.name}</h3>
@@ -402,37 +310,30 @@ export default function Home() {
       <section id="quienes-somos" className="px-6 py-24" style={{ borderTop: "1px solid var(--border)" }}>
         <div className="w-full max-w-[1200px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-
-            {/* Col izquierda: Stack */}
             <div id="stack" className="flex flex-col gap-8">
               <div>
-                <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// tecnologías</p>
-                <h2 className="gsap-heading font-display text-4xl sm:text-5xl" style={{ color: "var(--fg)" }}>NUESTRO STACK</h2>
+                <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>{t.stack.label}</p>
+                <h2 className="gsap-heading font-display text-4xl sm:text-5xl" style={{ color: "var(--fg)" }}>{t.stack.heading}</h2>
               </div>
               <div className="flex flex-wrap gap-2">
-                {STACK.map((t) => <span key={t} className="gsap-stack-tag tech-tag">{t}</span>)}
+                {STACK.map((s) => <span key={s} className="gsap-stack-tag tech-tag">{s}</span>)}
               </div>
               <p id="stack-desc" className="text-xs leading-relaxed" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace" }}>
-                Herramientas probadas que permiten moverse rápido sin sacrificar estabilidad. Nada de hype tecnológico sin propósito.
+                {t.stack.desc}
               </p>
             </div>
-
-            {/* Col derecha: Quiénes somos */}
             <div className="flex flex-col gap-8">
               <div>
-                <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// quiénes somos</p>
+                <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>{t.about.label}</p>
                 <h2 className="gsap-heading font-display text-4xl sm:text-5xl leading-none" style={{ color: "var(--fg)" }}>
-                  NO SOMOS UNA <span className="highlight-bar">AGENCIA DE IA.</span>
+                  {t.about.heading1} <span className="highlight-bar">{t.about.heading2}</span>
                 </h2>
               </div>
               <p id="quienes-body" className="text-xs leading-relaxed" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace" }}>
-                Somos un equipo técnico chico y obsesionado con el resultado. Trabajamos con pocos proyectos para poder ir a fondo en cada uno. No vendemos soluciones genéricas — construimos ventaja competitiva real.
+                {t.about.body}
               </p>
               <div className="grid grid-cols-2 gap-3">
-                {[
-                  { name: "Agustín Ale",       role: "Co-founder" },
-                  { name: "Cristóbal Cantolla", role: "Co-founder" },
-                ].map((f) => (
+                {FOUNDERS.map((f) => (
                   <div key={f.name} className="flex flex-col gap-1 p-4" style={{ border: "1px solid var(--border)", background: "rgba(0,0,0,0.3)" }}>
                     <span className="font-mono text-xs font-bold" style={{ color: "var(--fg)" }}>{f.name}</span>
                     <span className="font-mono text-xs uppercase tracking-widest" style={{ color: "var(--accent)", fontSize: "0.6rem" }}>{f.role}</span>
@@ -440,7 +341,6 @@ export default function Home() {
                 ))}
               </div>
             </div>
-
           </div>
         </div>
       </section>
@@ -450,27 +350,25 @@ export default function Home() {
         <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-10">
           {formStatus === "success" ? (
             <div className="page-in flex flex-col gap-4 py-12">
-              <span className="font-mono text-xs" style={{ color: "var(--accent)" }}>✓ transmisión recibida</span>
-              <h2 className="font-display text-5xl" style={{ color: "var(--fg)" }}>MENSAJE ENVIADO.</h2>
-              <p className="font-mono text-xs" style={{ color: "var(--fg-dim)" }}>Respondemos en menos de 24 horas.</p>
+              <span className="font-mono text-xs" style={{ color: "var(--accent)" }}>{t.contact.success_label}</span>
+              <h2 className="font-display text-5xl" style={{ color: "var(--fg)" }}>{t.contact.success_heading}</h2>
+              <p className="font-mono text-xs" style={{ color: "var(--fg-dim)" }}>{t.contact.success_sub}</p>
             </div>
           ) : (
             <>
               <div>
-                <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// iniciar proyecto</p>
+                <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>{t.contact.label}</p>
                 <h2 id="contact-heading" className="font-display text-5xl sm:text-6xl leading-none" style={{ color: "var(--fg)" }}>
-                  ¿CÓMO PUEDE LA IA <span className="cursor">POTENCIAR TU PRODUCTO?</span>
+                  <span className="cursor">{t.contact.heading}</span>
                 </h2>
               </div>
-
-              {/* Steps */}
               <div id="contact-steps" className="flex gap-4 overflow-x-auto pb-1">
-                {FORM_STEPS.map((s, i) => {
+                {formSteps.map((s, i) => {
                   const isActive = i === step, isDone = i < step;
                   return (
                     <div key={s.id} className="flex flex-col items-center gap-1.5 shrink-0" style={{ minWidth: 60 }}>
                       <div className="w-7 h-7 flex items-center justify-center font-mono text-xs"
-                        style={{ background: isActive ? "var(--accent)" : isDone ? "var(--accent)" : "transparent", color: isActive || isDone ? "var(--bg)" : "var(--fg-dim)", border: isActive || isDone ? "none" : "1px solid var(--border)", transition: "background 0.3s" }}>
+                        style={{ background: isActive || isDone ? "var(--accent)" : "transparent", color: isActive || isDone ? "var(--bg)" : "var(--fg-dim)", border: isActive || isDone ? "none" : "1px solid var(--border)", transition: "background 0.3s" }}>
                         {isDone ? "✓" : s.id}
                       </div>
                       <span className="font-mono text-center leading-tight" style={{ color: isActive ? "var(--fg)" : "var(--fg-muted)", fontSize: "0.6rem", textTransform: "uppercase" }}>{s.label}</span>
@@ -478,8 +376,6 @@ export default function Home() {
                   );
                 })}
               </div>
-
-              {/* Input */}
               <div className={`flex flex-col gap-3 step-content${blurring ? " blurring" : ""}`}>
                 <label className="font-mono text-xs uppercase tracking-widest" style={{ color: "var(--fg-dim)" }}>
                   <span style={{ color: "var(--accent)" }}>›</span> {current.label}
@@ -487,35 +383,26 @@ export default function Home() {
                 {current.type === "textarea" ? (
                   <textarea ref={(el) => { inputRef.current = el; }} value={value} onChange={(e) => handleChange(e.target.value)}
                     placeholder={current.placeholder} rows={5} disabled={formStatus === "loading"}
-                    className="w-full px-4 py-3 resize-none"
-                    style={inputStyle}
+                    className="w-full px-4 py-3 resize-none" style={inputStyle}
                     onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(168,255,60,0.4)"; e.currentTarget.style.boxShadow = "0 0 0 1px rgba(168,255,60,0.15)"; }}
-                    onBlur={(e)  => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.boxShadow = "none"; }}
-                  />
+                    onBlur={(e)  => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.boxShadow = "none"; }} />
                 ) : (
                   <input ref={(el) => { inputRef.current = el; }} type={current.type} value={value} onChange={(e) => handleChange(e.target.value)}
                     placeholder={current.placeholder} disabled={formStatus === "loading"}
                     onKeyDown={(e) => { if (e.key === "Enter") { isLast ? handleSubmit() : handleNext(); } }}
-                    className="w-full px-4 py-3"
-                    style={inputStyle}
+                    className="w-full px-4 py-3" style={inputStyle}
                     onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(168,255,60,0.4)"; e.currentTarget.style.boxShadow = "0 0 0 1px rgba(168,255,60,0.15)"; }}
-                    onBlur={(e)  => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.boxShadow = "none"; }}
-                  />
+                    onBlur={(e)  => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.boxShadow = "none"; }} />
                 )}
                 {formStatus === "error" && <p className="font-mono text-xs" style={{ color: "#ff4d4f" }}>{errorMsg}</p>}
               </div>
-
-              {/* Nav */}
               <div className={`flex items-center ${step === 0 ? "justify-end" : "justify-between"}`}>
-                {step > 0 && <button onClick={handleBack} className="btn-ghost">← Atrás</button>}
+                {step > 0 && <button onClick={handleBack} className="btn-ghost">{t.contact.back}</button>}
                 <button onClick={isLast ? handleSubmit : handleNext} disabled={formStatus === "loading"} className="btn-primary disabled:opacity-50">
-                  {formStatus === "loading" ? "Enviando..." : isLast ? "Enviar →" : "Siguiente →"}
+                  {formStatus === "loading" ? t.contact.sending : isLast ? t.contact.send : t.contact.next}
                 </button>
               </div>
-
-              <p className="font-mono text-xs" style={{ color: "var(--fg-muted)" }}>
-                › Respondemos en menos de 24 horas · Sin spam · Sin presiones
-              </p>
+              <p className="font-mono text-xs" style={{ color: "var(--fg-muted)" }}>{t.contact.fine_print}</p>
             </>
           )}
         </div>
@@ -526,16 +413,16 @@ export default function Home() {
         <div className="max-w-[1200px] mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div className="flex flex-col gap-1">
             <span style={{ fontFamily: "var(--font-special-gothic)", fontSize: "1rem", letterSpacing: "0.03em", color: "var(--fg)" }}>The Nerd Company</span>
-            <span className="font-mono text-xs" style={{ color: "var(--fg-muted)" }}>Buenos Aires — Remote Worldwide</span>
+            <span className="font-mono text-xs" style={{ color: "var(--fg-muted)" }}>{t.footer.location}</span>
           </div>
           <div className="flex flex-col items-start sm:items-end gap-1">
             <button onClick={copyEmail} className="font-mono text-xs transition-colors duration-200" style={{ color: copied ? "var(--accent)" : "var(--fg-dim)" }}
               onMouseEnter={(e) => { if (!copied) e.currentTarget.style.color = "var(--fg)"; }}
               onMouseLeave={(e) => { if (!copied) e.currentTarget.style.color = "var(--fg-dim)"; }}>
-              {copied ? "✓ copiado" : CONTACT_EMAIL}
+              {copied ? t.footer.copied : CONTACT_EMAIL}
             </button>
             <span className="font-mono text-xs" style={{ color: "var(--fg-muted)" }}>
-              Open for selected projects · © {new Date().getFullYear()}
+              {t.footer.open} · © {new Date().getFullYear()}
             </span>
           </div>
         </div>
