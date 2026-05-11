@@ -234,7 +234,7 @@ export default function Home() {
 
       {/* ── HERO ── */}
       <section id="hero" className="min-h-screen flex flex-col justify-center px-6 pt-24 pb-16">
-        <div className="page-in w-full max-w-[800px] mx-auto flex flex-col gap-8">
+        <div className="page-in w-full max-w-[1200px] mx-auto flex flex-col gap-8">
 
           <div className="font-mono text-xs" style={{ color: "var(--fg-dim)" }}>
             <span style={{ color: "var(--accent)" }}>$</span> whoami — The Nerd Company v1.0
@@ -268,7 +268,7 @@ export default function Home() {
 
       {/* ── QUOTE 1: phrase + globe ── */}
       <section style={{ background: "var(--bg-alt)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
-        <div className="w-full max-w-[800px] mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div className="w-full max-w-[1200px] mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div data-reveal className="flex flex-col gap-4">
             <p className="font-mono text-xs" style={{ color: "var(--fg-dim)" }}>// insight</p>
             <blockquote className="font-display text-4xl sm:text-5xl leading-tight" style={{ color: "var(--fg)" }}>
@@ -286,7 +286,7 @@ export default function Home() {
 
       {/* ── SERVICES ── */}
       <section id="servicios" className="px-6 py-24">
-        <div className="w-full max-w-[800px] mx-auto flex flex-col gap-12">
+        <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-12">
           <div data-reveal>
             <p className="font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// servicios</p>
             <h2 className="font-display text-5xl sm:text-6xl" style={{ color: "var(--fg)" }}>LO QUE HACEMOS</h2>
@@ -308,26 +308,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── QUOTE 2: full width phrase ── */}
-      <section style={{ background: "var(--bg-alt)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)", overflow: "hidden" }}>
-        <div className="w-full max-w-[800px] mx-auto px-6 py-20 flex flex-col gap-8">
-          <p data-reveal className="font-mono text-xs" style={{ color: "var(--fg-dim)" }}>// filosofía</p>
-          <div data-reveal data-delay="80" className="font-display text-5xl sm:text-6xl md:text-7xl leading-none" style={{ color: "var(--fg)" }}>
-            LA AUTOMATIZACIÓN<br />
-            NO REEMPLAZA<br />
-            PERSONAS.<br />
-            <span className="highlight-bar">LES DEVUELVE</span><br />
-            SU TIEMPO.
-          </div>
-          <p data-reveal data-delay="160" className="text-xs max-w-sm" style={{ color: "var(--fg-muted)", fontFamily: "var(--font-space-mono), monospace" }}>
-            Preferimos lanzar rápido y mejorar iterando antes que pasar meses en presentaciones.
-          </p>
-        </div>
-      </section>
-
-      {/* ── PROJECTS ── */}
+{/* ── PROJECTS ── */}
       <section id="proyectos" className="px-6 py-24">
-        <div className="w-full max-w-[800px] mx-auto flex flex-col gap-12">
+        <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-12">
           <div data-reveal>
             <p className="font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// proyectos anteriores</p>
             <h2 className="font-display text-5xl sm:text-6xl" style={{ color: "var(--fg)" }}>PRODUCTOS<br />QUE CONSTRUIMOS</h2>
@@ -356,7 +339,7 @@ export default function Home() {
 
       {/* ── PROCESS ── */}
       <section id="proceso" className="px-6 py-24" style={{ background: "var(--bg-alt)", borderTop: "1px solid var(--border)" }}>
-        <div className="w-full max-w-[800px] mx-auto flex flex-col gap-12">
+        <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-12">
           <div data-reveal>
             <p className="font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// cómo trabajamos</p>
             <h2 className="font-display text-5xl sm:text-6xl" style={{ color: "var(--fg)" }}>PROCESO</h2>
@@ -376,7 +359,7 @@ export default function Home() {
 
       {/* ── STACK ── */}
       <section id="stack" className="px-6 py-24" style={{ borderTop: "1px solid var(--border)" }}>
-        <div className="w-full max-w-[800px] mx-auto flex flex-col gap-10">
+        <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-10">
           <div data-reveal>
             <p className="font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// tecnologías</p>
             <h2 className="font-display text-5xl sm:text-6xl" style={{ color: "var(--fg)" }}>NUESTRO STACK</h2>
@@ -392,7 +375,7 @@ export default function Home() {
 
       {/* ── WHO WE ARE ── */}
       <section id="quienes-somos" className="px-6 py-24" style={{ background: "var(--bg-alt)", borderTop: "1px solid var(--border)" }}>
-        <div className="w-full max-w-[800px] mx-auto flex flex-col gap-12">
+        <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-12">
           <div data-reveal>
             <p className="font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// quiénes somos</p>
             <h2 className="font-display text-5xl sm:text-6xl leading-none" style={{ color: "var(--fg)" }}>
@@ -416,7 +399,7 @@ export default function Home() {
 
       {/* ── CONTACT ── */}
       <section id="contacto" className="px-6 py-24" style={{ borderTop: "1px solid var(--border)" }}>
-        <div className="w-full max-w-[800px] mx-auto flex flex-col gap-10">
+        <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-10">
           {formStatus === "success" ? (
             <div className="page-in flex flex-col gap-4 py-12">
               <span className="font-mono text-xs" style={{ color: "var(--accent)" }}>✓ transmisión recibida</span>
@@ -492,7 +475,7 @@ export default function Home() {
 
       {/* ── FOOTER ── */}
       <footer className="px-6 py-10" style={{ background: "var(--bg-alt)", borderTop: "1px solid var(--border)" }}>
-        <div className="max-w-[800px] mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+        <div className="max-w-[1200px] mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div className="flex flex-col gap-1">
             <span style={{ fontFamily: "var(--font-special-gothic)", fontSize: "1rem", letterSpacing: "0.03em", color: "var(--fg)" }}>The Nerd Company</span>
             <span className="font-mono text-xs" style={{ color: "var(--fg-muted)" }}>Buenos Aires — Remote Worldwide</span>
