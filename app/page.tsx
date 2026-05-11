@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import GsapAnimations from "./components/GsapAnimations";
 import Link from "next/link";
+import { ServiceGraphic } from "./components/ServiceGraphics";
 
 /* ─── Data ──────────────────────────────────────────────────── */
 const NAV_LINKS = [
@@ -314,11 +315,14 @@ export default function Home() {
           </div>
           <div style={{ borderTop: "1px solid var(--border)" }}>
             {SERVICES.map((s) => (
-              <div key={s.n} className="gsap-srv-row flex gap-6 py-8" style={{ borderBottom: "1px solid var(--border)" }}>
-                <span className="font-mono text-xs pt-1 shrink-0" style={{ color: "var(--accent)", minWidth: 24 }}>{s.n}</span>
-                <div>
+              <div key={s.n} className="gsap-srv-row flex items-center gap-6 py-8" style={{ borderBottom: "1px solid var(--border)" }}>
+                <span className="font-mono text-xs shrink-0 self-start pt-1" style={{ color: "var(--accent)", minWidth: 24 }}>{s.n}</span>
+                <div className="flex-1">
                   <h3 className="font-mono text-sm font-bold mb-2 uppercase tracking-wider" style={{ color: "var(--fg)" }}>{s.name}</h3>
                   <p className="text-sm leading-relaxed" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace", fontSize: "0.75rem" }}>{s.desc}</p>
+                </div>
+                <div className="hidden md:block shrink-0" style={{ width: 180, height: 120 }}>
+                  <ServiceGraphic n={s.n} />
                 </div>
               </div>
             ))}
