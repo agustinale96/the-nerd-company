@@ -14,18 +14,18 @@ const NAV_LINKS = [
 const SERVICES = [
   {
     n: "01",
-    name: "Automatización de Procesos",
-    desc: "Identificamos procesos repetitivos y los automatizamos. Menos errores humanos, más tiempo para lo que realmente importa. Integraciones, workflows, notificaciones y pipelines.",
+    name: "IA aplicada a tu producto",
+    desc: "Incorporamos inteligencia artificial donde más impacto tiene en tu negocio. Desde recomendaciones personalizadas hasta decisiones automatizadas que escalan con vos.",
   },
   {
     n: "02",
-    name: "Desarrollo de Productos Digitales",
-    desc: "MVPs, apps y plataformas que se integran con tus workflows existentes desde el día uno. Sin deuda técnica innecesaria.",
+    name: "Productos digitales con IA integrada",
+    desc: "Construimos productos que aprenden. MVPs y plataformas con IA integrada desde el primer sprint — no como feature, sino como núcleo del negocio.",
   },
   {
     n: "03",
-    name: "Consultoría e Integración",
-    desc: "Conectamos tus herramientas y sistemas para que trabajen juntos sin fricción. Slack, HubSpot, Notion, ERPs, APIs propias — lo que necesites.",
+    name: "Estrategia e integración de IA",
+    desc: "Te ayudamos a entender dónde la IA genera ventaja real en tu contexto — y lo construimos. Sin hype, sin soluciones genéricas. Con tu stack, tus datos, tu lógica.",
   },
 ];
 
@@ -63,11 +63,11 @@ const PROCESS = [
 const STACK = ["React", "Next.js", "TypeScript", "Node.js", "PostgreSQL", "Supabase", "Redis", "AWS", "Vercel", "Figma", "Docker", "n8n", "Make", "Zapier"];
 
 const AVOID = [
-  "Automatizaciones frágiles sin monitoreo",
-  "Integraciones ad-hoc sin documentación",
-  "Productos sobreingenierizados",
-  "Procesos eternos con slides infinitos",
-  "Deuda técnica acumulada sin plan",
+  "IA como cosmética (un chatbot que nadie usa)",
+  "Promesas de transformación sin resultados medibles",
+  "Soluciones de caja negra que no podés escalar",
+  "Proyectos eternos que nunca llegan a producción",
+  "Deuda técnica disfrazada de innovación",
 ];
 
 const FORM_STEPS = [
@@ -79,7 +79,7 @@ const FORM_STEPS = [
 
 const CONTACT_EMAIL = "hellothere@thenerdcompany.com";
 
-const MARQUEE_WORDS = ["AUTOMATIZAMOS", "▸", "CONSTRUIMOS", "▸", "OPTIMIZAMOS", "▸", "ESCALAMOS", "▸", "INTEGRAMOS", "▸", "DESPLEGAMOS", "▸"];
+const MARQUEE_WORDS = ["POTENCIAMOS", "▸", "CONSTRUIMOS", "▸", "ESCALAMOS", "▸", "DIFERENCIAMOS", "▸", "INTEGRAMOS", "▸", "EVOLUCIONAMOS", "▸"];
 
 type FormStatus = "idle" | "loading" | "success" | "error";
 
@@ -109,12 +109,12 @@ function TerminalWindow() {
   return (
     <div className="term-box w-full">
       <div className="flex flex-col gap-1.5" style={{ color: "var(--fg-dim)", fontSize: "0.76rem", lineHeight: 1.7 }}>
-        <span className="gsap-terminal-line"><span style={{ color: "var(--accent)" }}>$</span> analyze --processes all</span>
-        <span className="gsap-terminal-line" style={{ color: "var(--fg-muted)" }}>› Scanning 47 manual processes...</span>
-        <span className="gsap-terminal-line"><span style={{ color: "var(--accent)" }}>✓</span> Found 12 automation candidates</span>
-        <span className="gsap-terminal-line" style={{ color: "var(--fg-muted)" }}>› Estimating time savings...</span>
-        <span className="gsap-terminal-line"><span style={{ color: "var(--accent)" }}>✓</span> Projected: <span style={{ color: "var(--fg)" }}>340 hrs/month</span> recovered</span>
-        <span className="gsap-terminal-line"><span style={{ color: "var(--accent)" }}>$</span> deploy --env production<span className="cursor" /></span>
+        <span className="gsap-terminal-line"><span style={{ color: "var(--accent)" }}>$</span> analyze --brand potential</span>
+        <span className="gsap-terminal-line" style={{ color: "var(--fg-muted)" }}>› Evaluating your product stack...</span>
+        <span className="gsap-terminal-line"><span style={{ color: "var(--accent)" }}>✓</span> 3 AI leverage points identified</span>
+        <span className="gsap-terminal-line" style={{ color: "var(--fg-muted)" }}>› Modeling growth scenarios...</span>
+        <span className="gsap-terminal-line"><span style={{ color: "var(--accent)" }}>✓</span> Estimated impact: <span style={{ color: "var(--fg)" }}>4.2x output capacity</span></span>
+        <span className="gsap-terminal-line"><span style={{ color: "var(--accent)" }}>$</span> deploy --mode intelligent<span className="cursor" /></span>
       </div>
     </div>
   );
@@ -262,19 +262,19 @@ export default function Home() {
           </div>
 
           <h1 id="hero-h1" className="font-display text-6xl sm:text-7xl md:text-8xl leading-none" style={{ color: "var(--fg)" }}>
-            AUTOMATIZAMOS <span className="highlight-bar">TUS PROCESOS.</span><span className="cursor" />
+            TU PRODUCTO, <span className="highlight-bar">POTENCIADO CON IA.</span><span className="cursor" />
           </h1>
 
           <p id="hero-sub" className="text-sm sm:text-base leading-relaxed max-w-xl" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace" }}>
-            Diseñamos y desarrollamos sistemas que trabajan solos. Para equipos y fundadores obsesionados con hacer más con menos.
+            Construimos la inteligencia detrás de tu marca. Para equipos y fundadores que quieren crecer sin perder el control.
           </p>
 
           <div id="hero-btns" className="flex flex-col sm:flex-row gap-3 mt-2">
             <button onClick={() => scrollTo("#contacto")} className="btn-primary">
-              Empecemos →
+              Explorá cómo aplicamos IA →
             </button>
             <button onClick={() => scrollTo("#servicios")} className="btn-ghost">
-              Ver servicios
+              Ver casos reales
             </button>
           </div>
 
@@ -313,10 +313,10 @@ export default function Home() {
           <div id="quote-text" className="flex flex-col gap-4">
             <p className="gsap-label font-mono text-xs" style={{ color: "var(--fg-dim)" }}>// insight</p>
             <blockquote className="font-display text-4xl sm:text-5xl leading-tight" style={{ color: "var(--fg)" }}>
-              "Los mejores sistemas trabajan <span className="highlight-bar">mientras dormís."</span>
+              "La IA no reemplaza tu marca — <span className="highlight-bar">la hace imbatible."</span>
             </blockquote>
             <p className="text-xs" style={{ color: "var(--fg-muted)", fontFamily: "var(--font-space-mono), monospace" }}>
-              Un proceso manual es deuda técnica disfrazada.
+              Cada decisión con datos, cada interacción más inteligente, cada producto más competitivo.
             </p>
           </div>
           <div id="globe-wrap" className="w-full aspect-square max-w-xs mx-auto">
@@ -344,7 +344,7 @@ export default function Home() {
             ))}
           </div>
           <div>
-            <button onClick={() => scrollTo("#contacto")} className="btn-primary">Hablemos de tu proceso →</button>
+            <button onClick={() => scrollTo("#contacto")} className="btn-primary">Hablemos de tu producto →</button>
           </div>
         </div>
       </section>
@@ -354,7 +354,7 @@ export default function Home() {
         <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-12">
           <div>
             <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// proyectos anteriores</p>
-            <h2 className="gsap-heading font-display text-5xl sm:text-6xl" style={{ color: "var(--fg)" }}>PRODUCTOS QUE CONSTRUIMOS</h2>
+            <h2 className="gsap-heading font-display text-5xl sm:text-6xl" style={{ color: "var(--fg)" }}>PRODUCTOS QUE POTENCIAMOS</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {PROJECTS.map((p) => (
@@ -420,11 +420,11 @@ export default function Home() {
           <div>
             <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// quiénes somos</p>
             <h2 className="gsap-heading font-display text-5xl sm:text-6xl leading-none" style={{ color: "var(--fg)" }}>
-              NO SOMOS UNA <span className="highlight-bar">SOFTWARE FACTORY.</span>
+              NO SOMOS UNA <span className="highlight-bar">AGENCIA DE IA.</span>
             </h2>
           </div>
           <p id="quienes-body" className="text-xs leading-relaxed" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace", maxWidth: 520 }}>
-            Somos un equipo técnico pequeño y enfocado. Trabajamos con pocos proyectos en paralelo para poder pensar bien cada uno. No vendemos horas — construimos sistemas que funcionan.
+            Somos un equipo técnico chico y obsesionado con el resultado. Trabajamos con pocos proyectos para poder ir a fondo en cada uno. No vendemos soluciones genéricas — construimos ventaja competitiva real.
           </p>
           <div className="flex flex-col gap-3">
             <p className="gsap-label font-mono text-xs uppercase tracking-widest" style={{ color: "var(--fg-muted)" }}>// lo que evitamos</p>
@@ -451,7 +451,7 @@ export default function Home() {
               <div>
                 <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// iniciar proyecto</p>
                 <h2 id="contact-heading" className="font-display text-5xl sm:text-6xl leading-none" style={{ color: "var(--fg)" }}>
-                  ¿QUÉ QUERÉS <span className="cursor">AUTOMATIZAR?</span>
+                  ¿CÓMO PUEDE LA IA <span className="cursor">POTENCIAR TU PRODUCTO?</span>
                 </h2>
               </div>
 
