@@ -246,7 +246,7 @@ export default function Home() {
       )}
 
       {/* ── HERO ── */}
-      <section id="hero" className="min-h-screen flex flex-col items-center justify-center px-6 pt-24 pb-16">
+      <section id="hero" className="min-h-[80vh] flex flex-col items-center justify-center px-6 pt-24 pb-16">
 
         <div className="page-in w-full max-w-[1200px] mx-auto flex flex-col items-center text-center gap-8">
 
@@ -296,8 +296,8 @@ export default function Home() {
 
       {/* ── QUOTE: phrase + globe ── */}
       <section style={{ background: "var(--bg-alt)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
-        <div className="w-full max-w-[1200px] mx-auto px-6 py-20 flex flex-col md:flex-row gap-12 md:items-center">
-          <div id="quote-text" className="flex flex-col gap-4">
+        <div className="w-full max-w-[1200px] mx-auto px-6 py-20 flex flex-col items-center gap-10 text-center">
+          <div id="quote-text" className="flex flex-col items-center gap-4">
             <p className="gsap-label font-mono text-xs" style={{ color: "var(--fg-dim)" }}>// insight</p>
             <blockquote className="font-display text-4xl sm:text-5xl leading-tight" style={{ color: "var(--fg)" }}>
               "La IA no reemplaza tu marca —<br />
@@ -307,7 +307,7 @@ export default function Home() {
               Cada decisión con datos, cada interacción más inteligente, cada producto más competitivo.
             </p>
           </div>
-          <div id="globe-wrap" className="w-72 h-72 shrink-0 mx-auto md:mx-0">
+          <div id="globe-wrap" className="w-72 h-72">
             <Globe />
           </div>
         </div>
