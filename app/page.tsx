@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import GsapAnimations from "./components/GsapAnimations";
 
 /* ─── Data ──────────────────────────────────────────────────── */
 const NAV_LINKS = [
@@ -78,6 +79,8 @@ const FORM_STEPS = [
 
 const CONTACT_EMAIL = "hellothere@thenerdcompany.com";
 
+const MARQUEE_WORDS = ["AUTOMATIZAMOS", "▸", "CONSTRUIMOS", "▸", "OPTIMIZAMOS", "▸", "ESCALAMOS", "▸", "INTEGRAMOS", "▸", "DESPLEGAMOS", "▸"];
+
 type FormStatus = "idle" | "loading" | "success" | "error";
 
 /* ─── Inline SVG: Wireframe Globe ─── */
@@ -106,12 +109,12 @@ function TerminalWindow() {
   return (
     <div className="term-box w-full">
       <div className="flex flex-col gap-1.5" style={{ color: "var(--fg-dim)", fontSize: "0.76rem", lineHeight: 1.7 }}>
-        <span><span style={{ color: "var(--accent)" }}>$</span> analyze --processes all</span>
-        <span style={{ color: "var(--fg-muted)" }}>› Scanning 47 manual processes...</span>
-        <span><span style={{ color: "var(--accent)" }}>✓</span> Found 12 automation candidates</span>
-        <span style={{ color: "var(--fg-muted)" }}>› Estimating time savings...</span>
-        <span><span style={{ color: "var(--accent)" }}>✓</span> Projected: <span style={{ color: "var(--fg)" }}>340 hrs/month</span> recovered</span>
-        <span><span style={{ color: "var(--accent)" }}>$</span> deploy --env production<span className="cursor" /></span>
+        <span className="gsap-terminal-line"><span style={{ color: "var(--accent)" }}>$</span> analyze --processes all</span>
+        <span className="gsap-terminal-line" style={{ color: "var(--fg-muted)" }}>› Scanning 47 manual processes...</span>
+        <span className="gsap-terminal-line"><span style={{ color: "var(--accent)" }}>✓</span> Found 12 automation candidates</span>
+        <span className="gsap-terminal-line" style={{ color: "var(--fg-muted)" }}>› Estimating time savings...</span>
+        <span className="gsap-terminal-line"><span style={{ color: "var(--accent)" }}>✓</span> Projected: <span style={{ color: "var(--fg)" }}>340 hrs/month</span> recovered</span>
+        <span className="gsap-terminal-line"><span style={{ color: "var(--accent)" }}>$</span> deploy --env production<span className="cursor" /></span>
       </div>
     </div>
   );
@@ -198,6 +201,24 @@ export default function Home() {
   return (
     <div className="flex flex-col">
 
+      <GsapAnimations />
+
+      {/* ── SCROLL PROGRESS BAR ── */}
+      <div
+        id="gsap-progress"
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          height: 2,
+          width: "100%",
+          background: "var(--accent)",
+          transformOrigin: "left center",
+          transform: "scaleX(0)",
+          zIndex: 9997,
+        }}
+      />
+
       {/* ── HEADER ── */}
       <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4"
         style={{ background: "rgba(6,12,6,0.9)", backdropFilter: "blur(12px)", borderBottom: "1px solid var(--border)" }}>
@@ -236,19 +257,19 @@ export default function Home() {
       <section id="hero" className="min-h-screen flex flex-col justify-center px-6 pt-24 pb-16">
         <div className="page-in w-full max-w-[1200px] mx-auto flex flex-col gap-8">
 
-          <div className="font-mono text-xs" style={{ color: "var(--fg-dim)" }}>
+          <div id="hero-prompt" className="font-mono text-xs" style={{ color: "var(--fg-dim)" }}>
             <span style={{ color: "var(--accent)" }}>$</span> whoami — The Nerd Company v1.0
           </div>
 
-          <h1 className="font-display text-6xl sm:text-7xl md:text-8xl leading-none" style={{ color: "var(--fg)" }}>
+          <h1 id="hero-h1" className="font-display text-6xl sm:text-7xl md:text-8xl leading-none" style={{ color: "var(--fg)" }}>
             AUTOMATIZAMOS <span className="highlight-bar">TUS PROCESOS.</span><span className="cursor" />
           </h1>
 
-          <p className="text-sm sm:text-base leading-relaxed max-w-xl" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace" }}>
+          <p id="hero-sub" className="text-sm sm:text-base leading-relaxed max-w-xl" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace" }}>
             Diseñamos y desarrollamos sistemas que trabajan solos. Para equipos y fundadores obsesionados con hacer más con menos.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3 mt-2">
+          <div id="hero-btns" className="flex flex-col sm:flex-row gap-3 mt-2">
             <button onClick={() => scrollTo("#contacto")} className="btn-primary">
               Empecemos →
             </button>
@@ -257,18 +278,40 @@ export default function Home() {
             </button>
           </div>
 
-          <div className="mt-8 max-w-lg">
+          <div id="hero-terminal" className="mt-8 max-w-lg">
             <TerminalWindow />
           </div>
 
         </div>
       </section>
 
-      {/* ── QUOTE 1: phrase + globe ── */}
+      {/* ── MARQUEE ── */}
+      <div className="overflow-hidden py-3" style={{ borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
+        <div id="gsap-marquee-inner" className="flex whitespace-nowrap" style={{ willChange: "transform" }}>
+          {[0, 1].map((copy) => (
+            <div key={copy} className="flex items-center shrink-0">
+              {MARQUEE_WORDS.map((w, j) => (
+                <span
+                  key={`${copy}-${j}`}
+                  className="font-mono text-xs uppercase tracking-widest shrink-0"
+                  style={{
+                    color: w === "▸" ? "var(--accent)" : "var(--fg-dim)",
+                    padding: "0 20px",
+                  }}
+                >
+                  {w}
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── QUOTE: phrase + globe ── */}
       <section style={{ background: "var(--bg-alt)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
         <div className="w-full max-w-[1200px] mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div data-reveal className="flex flex-col gap-4">
-            <p className="font-mono text-xs" style={{ color: "var(--fg-dim)" }}>// insight</p>
+          <div id="quote-text" className="flex flex-col gap-4">
+            <p className="gsap-label font-mono text-xs" style={{ color: "var(--fg-dim)" }}>// insight</p>
             <blockquote className="font-display text-4xl sm:text-5xl leading-tight" style={{ color: "var(--fg)" }}>
               "Los mejores sistemas trabajan <span className="highlight-bar">mientras dormís."</span>
             </blockquote>
@@ -276,7 +319,7 @@ export default function Home() {
               Un proceso manual es deuda técnica disfrazada.
             </p>
           </div>
-          <div data-reveal data-delay="150" className="w-full aspect-square max-w-xs mx-auto">
+          <div id="globe-wrap" className="w-full aspect-square max-w-xs mx-auto">
             <Globe />
           </div>
         </div>
@@ -285,13 +328,13 @@ export default function Home() {
       {/* ── SERVICES ── */}
       <section id="servicios" className="px-6 py-24">
         <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-12">
-          <div data-reveal>
-            <p className="font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// servicios</p>
-            <h2 className="font-display text-5xl sm:text-6xl" style={{ color: "var(--fg)" }}>LO QUE HACEMOS</h2>
+          <div>
+            <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// servicios</p>
+            <h2 className="gsap-heading font-display text-5xl sm:text-6xl" style={{ color: "var(--fg)" }}>LO QUE HACEMOS</h2>
           </div>
           <div style={{ borderTop: "1px solid var(--border)" }}>
-            {SERVICES.map((s, i) => (
-              <div key={s.n} data-reveal data-delay={i * 80} className="flex gap-6 py-8" style={{ borderBottom: "1px solid var(--border)" }}>
+            {SERVICES.map((s) => (
+              <div key={s.n} className="gsap-srv-row flex gap-6 py-8" style={{ borderBottom: "1px solid var(--border)" }}>
                 <span className="font-mono text-xs pt-1 shrink-0" style={{ color: "var(--accent)", minWidth: 24 }}>{s.n}</span>
                 <div>
                   <h3 className="font-mono text-sm font-bold mb-2 uppercase tracking-wider" style={{ color: "var(--fg)" }}>{s.name}</h3>
@@ -300,23 +343,23 @@ export default function Home() {
               </div>
             ))}
           </div>
-          <div data-reveal>
+          <div>
             <button onClick={() => scrollTo("#contacto")} className="btn-primary">Hablemos de tu proceso →</button>
           </div>
         </div>
       </section>
 
-{/* ── PROJECTS ── */}
+      {/* ── PROJECTS ── */}
       <section id="proyectos" className="px-6 py-24">
         <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-12">
-          <div data-reveal>
-            <p className="font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// proyectos anteriores</p>
-            <h2 className="font-display text-5xl sm:text-6xl" style={{ color: "var(--fg)" }}>PRODUCTOS QUE CONSTRUIMOS</h2>
+          <div>
+            <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// proyectos anteriores</p>
+            <h2 className="gsap-heading font-display text-5xl sm:text-6xl" style={{ color: "var(--fg)" }}>PRODUCTOS QUE CONSTRUIMOS</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {PROJECTS.map((p, i) => (
-              <div key={p.name} data-reveal data-delay={i * 80}
-                className="flex flex-col gap-4 p-6"
+            {PROJECTS.map((p) => (
+              <div key={p.name}
+                className="gsap-proj-card flex flex-col gap-4 p-6"
                 style={{ border: "1px solid var(--border)", background: "rgba(0,0,0,0.3)" }}>
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-xs uppercase" style={{ color: "var(--accent)", fontSize: "0.65rem" }}>{p.tag}</span>
@@ -338,13 +381,13 @@ export default function Home() {
       {/* ── PROCESS ── */}
       <section id="proceso" className="px-6 py-24" style={{ background: "var(--bg-alt)", borderTop: "1px solid var(--border)" }}>
         <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-12">
-          <div data-reveal>
-            <p className="font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// cómo trabajamos</p>
-            <h2 className="font-display text-5xl sm:text-6xl" style={{ color: "var(--fg)" }}>PROCESO</h2>
+          <div>
+            <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// cómo trabajamos</p>
+            <h2 className="gsap-heading font-display text-5xl sm:text-6xl" style={{ color: "var(--fg)" }}>PROCESO</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {PROCESS.map((p, i) => (
-              <div key={p.n} data-reveal data-delay={i * 80} className="flex flex-col gap-3 p-6"
+            {PROCESS.map((p) => (
+              <div key={p.n} className="gsap-proc-card flex flex-col gap-3 p-6"
                 style={{ border: "1px solid var(--border)", background: "rgba(0,0,0,0.3)" }}>
                 <span className="font-mono text-xs" style={{ color: "var(--accent)" }}>{p.n}</span>
                 <h3 className="font-mono text-sm font-bold uppercase tracking-wider" style={{ color: "var(--fg)" }}>{p.name}</h3>
@@ -358,14 +401,14 @@ export default function Home() {
       {/* ── STACK ── */}
       <section id="stack" className="px-6 py-24" style={{ borderTop: "1px solid var(--border)" }}>
         <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-10">
-          <div data-reveal>
-            <p className="font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// tecnologías</p>
-            <h2 className="font-display text-5xl sm:text-6xl" style={{ color: "var(--fg)" }}>NUESTRO STACK</h2>
+          <div>
+            <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// tecnologías</p>
+            <h2 className="gsap-heading font-display text-5xl sm:text-6xl" style={{ color: "var(--fg)" }}>NUESTRO STACK</h2>
           </div>
-          <div data-reveal data-delay="100" className="flex flex-wrap gap-2">
-            {STACK.map((t) => <span key={t} className="tech-tag">{t}</span>)}
+          <div className="flex flex-wrap gap-2">
+            {STACK.map((t) => <span key={t} className="gsap-stack-tag tech-tag">{t}</span>)}
           </div>
-          <p data-reveal data-delay="180" className="text-xs leading-relaxed" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace", maxWidth: 480 }}>
+          <p id="stack-desc" className="text-xs leading-relaxed" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace", maxWidth: 480 }}>
             Herramientas probadas que permiten moverse rápido sin sacrificar estabilidad. Nada de hype tecnológico sin propósito.
           </p>
         </div>
@@ -374,19 +417,19 @@ export default function Home() {
       {/* ── WHO WE ARE ── */}
       <section id="quienes-somos" className="px-6 py-24" style={{ background: "var(--bg-alt)", borderTop: "1px solid var(--border)" }}>
         <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-12">
-          <div data-reveal>
-            <p className="font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// quiénes somos</p>
-            <h2 className="font-display text-5xl sm:text-6xl leading-none" style={{ color: "var(--fg)" }}>
+          <div>
+            <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// quiénes somos</p>
+            <h2 className="gsap-heading font-display text-5xl sm:text-6xl leading-none" style={{ color: "var(--fg)" }}>
               NO SOMOS UNA <span className="highlight-bar">SOFTWARE FACTORY.</span>
             </h2>
           </div>
-          <p data-reveal data-delay="100" className="text-xs leading-relaxed" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace", maxWidth: 520 }}>
+          <p id="quienes-body" className="text-xs leading-relaxed" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace", maxWidth: 520 }}>
             Somos un equipo técnico pequeño y enfocado. Trabajamos con pocos proyectos en paralelo para poder pensar bien cada uno. No vendemos horas — construimos sistemas que funcionan.
           </p>
-          <div data-reveal data-delay="150" className="flex flex-col gap-3">
-            <p className="font-mono text-xs uppercase tracking-widest" style={{ color: "var(--fg-muted)" }}>// lo que evitamos</p>
+          <div className="flex flex-col gap-3">
+            <p className="gsap-label font-mono text-xs uppercase tracking-widest" style={{ color: "var(--fg-muted)" }}>// lo que evitamos</p>
             {AVOID.map((a, i) => (
-              <div key={i} className="flex items-center gap-3 font-mono text-xs" style={{ color: "var(--fg-dim)" }}>
+              <div key={i} className="gsap-avoid-item flex items-center gap-3 font-mono text-xs" style={{ color: "var(--fg-dim)" }}>
                 <span style={{ color: "#ff4d4f" }}>✕</span> {a}
               </div>
             ))}
@@ -405,15 +448,15 @@ export default function Home() {
             </div>
           ) : (
             <>
-              <div data-reveal>
-                <p className="font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// iniciar proyecto</p>
-                <h2 className="font-display text-5xl sm:text-6xl leading-none" style={{ color: "var(--fg)" }}>
+              <div>
+                <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>// iniciar proyecto</p>
+                <h2 id="contact-heading" className="font-display text-5xl sm:text-6xl leading-none" style={{ color: "var(--fg)" }}>
                   ¿QUÉ QUERÉS <span className="cursor">AUTOMATIZAR?</span>
                 </h2>
               </div>
 
               {/* Steps */}
-              <div data-reveal data-delay="80" className="flex gap-4 overflow-x-auto pb-1">
+              <div id="contact-steps" className="flex gap-4 overflow-x-auto pb-1">
                 {FORM_STEPS.map((s, i) => {
                   const isActive = i === step, isDone = i < step;
                   return (

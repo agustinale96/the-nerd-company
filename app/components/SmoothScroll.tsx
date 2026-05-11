@@ -2,33 +2,28 @@
 
 import { useEffect } from "react";
 import Lenis from "lenis";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
   useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
     const lenis = new Lenis({
       duration: 1.3,
       easing: (t) => 1 - Math.pow(1 - t, 4),
     });
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const delay = parseInt(entry.target.getAttribute("data-delay") ?? "0");
-            setTimeout(() => entry.target.classList.add("is-visible"), delay);
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12 }
-    );
+    lenis.on("scroll", ScrollTrigger.update);
 
-    document.querySelectorAll("[data-reveal]").forEach((el) => observer.observe(el));
+    function lenisRaf(time: number) { lenis.raf(time * 1000); }
+    gsap.ticker.add(lenisRaf);
+    gsap.ticker.lagSmoothing(0);
 
-    function raf(time: number) { lenis.raf(time); requestAnimationFrame(raf); }
-    requestAnimationFrame(raf);
-
-    return () => { lenis.destroy(); observer.disconnect(); };
+    return () => {
+      lenis.destroy();
+      gsap.ticker.remove(lenisRaf);
+    };
   }, []);
 
   return <>{children}</>;
