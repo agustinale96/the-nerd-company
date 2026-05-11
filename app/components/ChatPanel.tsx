@@ -42,8 +42,11 @@ export default function ChatPanel({ lang = "es" }: { lang?: Lang }) {
   const [leadSaved, setLeadSaved] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const seqDone = useRef(false);
+  const langRef = useRef(lang);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => { langRef.current = lang; }, [lang]);
 
   /* Sync body class with panel open state */
   useEffect(() => {
@@ -81,7 +84,7 @@ export default function ChatPanel({ lang = "es" }: { lang?: Lang }) {
     const sequence = [
       { text: "wake up neo...", delay: 50 },
       { pause: 700 },
-      { text: INTRO[lang], delay: 38 },
+      { text: INTRO[langRef.current], delay: 38 },
     ];
 
     for (const step of sequence) {
