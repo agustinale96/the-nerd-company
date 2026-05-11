@@ -7,20 +7,33 @@ interface Msg {
   streaming?: boolean;
 }
 
-const INTRO_SEQUENCE = [
-  { text: "wake up neo...", delay: 50 },
-  { pause: 700 },
-  { text: "contanos sobre tu producto, ¿qué estás buscando potenciar?", delay: 38 },
-];
+type Lang = "es" | "en" | "pt";
 
-const QUICK_OPTIONS = [
-  "Producto digital",
-  "Servicio / proceso interno",
-  "E-commerce",
-  "Otro",
-];
+const INTRO: Record<Lang, string> = {
+  es: "contanos sobre tu producto, ¿qué estás buscando potenciar?",
+  en: "tell us about your product, what are you looking to enhance?",
+  pt: "conte-nos sobre seu produto, o que você quer potencializar?",
+};
 
-export default function ChatPanel() {
+const OPTIONS: Record<Lang, string[]> = {
+  es: ["Producto digital", "Servicio / proceso interno", "E-commerce", "Otro"],
+  en: ["Digital product",  "Service / internal process", "E-commerce", "Other"],
+  pt: ["Produto digital",  "Serviço / processo interno", "E-commerce", "Outro"],
+};
+
+const PLACEHOLDER: Record<Lang, string> = {
+  es: "escribí algo...",
+  en: "type something...",
+  pt: "escreva algo...",
+};
+
+const LEAD_BANNER: Record<Lang, string> = {
+  es: "✓ lead guardado — el equipo te contacta pronto",
+  en: "✓ lead saved — the team will contact you soon",
+  pt: "✓ lead salvo — a equipe vai entrar em contato",
+};
+
+export default function ChatPanel({ lang = "es" }: { lang?: Lang }) {
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(true);
   const [msgs, setMsgs] = useState<Msg[]>([]);
@@ -65,7 +78,13 @@ export default function ChatPanel() {
     let fullText = "";
     let msgIndex = 0;
 
-    for (const step of INTRO_SEQUENCE) {
+    const sequence = [
+      { text: "wake up neo...", delay: 50 },
+      { pause: 700 },
+      { text: INTRO[lang], delay: 38 },
+    ];
+
+    for (const step of sequence) {
       if ("pause" in step) {
         await sleep(step.pause as number);
         continue;
@@ -122,7 +141,7 @@ export default function ChatPanel() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text, history }),
+        body: JSON.stringify({ message: text, history, lang }),
       });
       if (!res.body) throw new Error("no body");
       const captured_lead = res.headers.get("X-Lead-Captured") === "true";
@@ -261,7 +280,7 @@ export default function ChatPanel() {
             letterSpacing: "0.08em",
             flexShrink: 0,
           }}>
-            ✓ lead guardado — el equipo te contacta pronto
+            {LEAD_BANNER[lang]}
           </div>
         )}
 
@@ -319,11 +338,11 @@ export default function ChatPanel() {
             gap: 6,
             flexShrink: 0,
           }}>
-            {QUICK_OPTIONS.map((opt) => (
+            {OPTIONS[lang].map((opt) => (
               <button
                 key={opt}
                 onClick={() => {
-                  if (opt === "Otro") {
+                  if (opt === OPTIONS[lang][OPTIONS[lang].length - 1]) {
                     setShowOptions(false);
                     inputRef.current?.focus();
                   } else {
@@ -369,7 +388,7 @@ export default function ChatPanel() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={onKey}
-            placeholder="escribí algo..."
+            placeholder={PLACEHOLDER[lang]}
             disabled={busy}
             style={{
               flex: 1,

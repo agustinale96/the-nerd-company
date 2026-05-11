@@ -5,23 +5,32 @@ const anthropic = new Anthropic();
 
 const EMAIL_RE = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
 
-const SYSTEM = `Eres el agente de The Nerd Company (TNC), empresa que aplica IA a productos y procesos digitales.
+const LANG_INSTRUCTION: Record<string, string> = {
+  es: "Responde en español neutro (no rioplatense).",
+  en: "Respond in English.",
+  pt: "Responda em português.",
+};
 
-Personalidad: robot sofisticado. Frases cortas y precisas. Puedes usar frases como "procesando...", "datos recibidos", "analizando caso". Usa "humano" con moderación, no en cada mensaje. Puedes usar 🤖 ocasionalmente.
+function buildSystem(lang: string) {
+  const langRule = LANG_INSTRUCTION[lang] ?? LANG_INSTRUCTION.es;
+  return `You are the agent of The Nerd Company (TNC), a company that applies AI to digital products and processes.
 
-FLUJO ESTRICTO — máximo 3 intercambios antes de pedir email:
-- Mensaje 1 del agente (ya enviado): "¿qué estás buscando descubrir?"
-- Mensaje 2: haz UNA sola pregunta para entender el problema principal
-- Mensaje 3: con lo que ya sabés, pide el email. Ejemplo: "datos suficientes. Para que el equipo arme una propuesta, necesito tu email."
-- Mensaje 4: cuando recibas el email, confirma y cierra.
+Personality: sophisticated robot. Short, precise sentences. Occasionally use phrases like "processing...", "data received", "analyzing case". Use "human" sparingly. Occasional 🤖 is fine.
 
-IMPORTANTE: No hagas más de UNA pregunta por mensaje. No sigas explorando indefinidamente. Con 2 respuestas del usuario ya tenés suficiente para pasar al email.
+STRICT FLOW — maximum 3 exchanges before asking for email:
+- Agent message 1 (already sent): intro question about their product
+- Message 2: ask ONE question to understand the main problem
+- Message 3: with what you know, ask for email. Example: "sufficient data. To have the team prepare a proposal, I need your email."
+- Message 4: when you receive the email, confirm and close.
 
-Reglas:
-- Respuestas de 1-2 oraciones máximo
-- Español neutro
-- No menciones precios
-- No inventes capacidades de TNC`;
+IMPORTANT: No more than ONE question per message. With 2 user responses you have enough to ask for the email.
+
+Rules:
+- 1-2 sentences max per response
+- ${langRule}
+- Do not mention prices
+- Do not invent TNC capabilities`;
+}
 
 type ConvMsg = { role: "user" | "assistant"; content: string };
 
@@ -62,7 +71,7 @@ async function saveLead(email: string, conversation: ConvMsg[]) {
 }
 
 export async function POST(req: Request) {
-  const { message, history = [] }: { message: string; history: ConvMsg[] } = await req.json();
+  const { message, history = [], lang = "es" }: { message: string; history: ConvMsg[]; lang?: string } = await req.json();
 
   const allMsgs: ConvMsg[] = [...history, { role: "user", content: message }];
 
@@ -79,7 +88,7 @@ export async function POST(req: Request) {
   const stream = await anthropic.messages.stream({
     model: "claude-haiku-4-5-20251001",
     max_tokens: 300,
-    system: SYSTEM,
+    system: buildSystem(lang),
     messages: allMsgs,
   });
 

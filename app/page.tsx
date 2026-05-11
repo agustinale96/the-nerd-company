@@ -136,7 +136,7 @@ export default function Home() {
     <div className="flex flex-col">
 
       <GsapAnimations />
-      <ChatPanel />
+      <ChatPanel lang={lang} />
 
       {/* ── SCROLL PROGRESS BAR ── */}
       <div id="gsap-progress" style={{ position: "fixed", top: 0, left: 0, height: 2, width: "100%", background: "var(--accent)", transformOrigin: "left center", transform: "scaleX(0)", zIndex: 9997 }} />
