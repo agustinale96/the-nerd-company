@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import GsapAnimations from "./components/GsapAnimations";
+import ChatPanel from "./components/ChatPanel";
 import Link from "next/link";
 
 /* ─── Data ──────────────────────────────────────────────────── */
@@ -186,6 +187,7 @@ export default function Home() {
     <div className="flex flex-col">
 
       <GsapAnimations />
+      <ChatPanel />
 
       {/* ── SCROLL PROGRESS BAR ── */}
       <div
