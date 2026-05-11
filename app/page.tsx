@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import GsapAnimations from "./components/GsapAnimations";
+import SplineViewer from "./components/SplineViewer";
 
 /* ─── Data ──────────────────────────────────────────────────── */
 const NAV_LINKS = [
@@ -101,22 +102,6 @@ function Globe() {
       <line x1="260" y1="148" x2="155" y2="230" stroke="var(--accent)" strokeWidth="0.8" strokeDasharray="3 3" opacity="0.4" />
       <line x1="155" y1="230" x2="300" y2="270" stroke="var(--accent)" strokeWidth="0.8" strokeDasharray="3 3" opacity="0.4" />
     </svg>
-  );
-}
-
-/* ─── Terminal Window ─── */
-function TerminalWindow() {
-  return (
-    <div className="term-box w-full">
-      <div className="flex flex-col gap-1.5" style={{ color: "var(--fg-dim)", fontSize: "0.76rem", lineHeight: 1.7 }}>
-        <span className="gsap-terminal-line"><span style={{ color: "var(--accent)" }}>$</span> analyze --brand potential</span>
-        <span className="gsap-terminal-line" style={{ color: "var(--fg-muted)" }}>› Evaluating your product stack...</span>
-        <span className="gsap-terminal-line"><span style={{ color: "var(--accent)" }}>✓</span> 3 AI leverage points identified</span>
-        <span className="gsap-terminal-line" style={{ color: "var(--fg-muted)" }}>› Modeling growth scenarios...</span>
-        <span className="gsap-terminal-line"><span style={{ color: "var(--accent)" }}>✓</span> Estimated impact: <span style={{ color: "var(--fg)" }}>4.2x output capacity</span></span>
-        <span className="gsap-terminal-line"><span style={{ color: "var(--accent)" }}>$</span> deploy --mode intelligent<span className="cursor" /></span>
-      </div>
-    </div>
   );
 }
 
@@ -254,8 +239,18 @@ export default function Home() {
       )}
 
       {/* ── HERO ── */}
-      <section id="hero" className="min-h-screen flex flex-col justify-center px-6 pt-24 pb-16">
-        <div className="page-in w-full max-w-[1200px] mx-auto flex flex-col gap-8">
+      <section id="hero" className="min-h-screen relative overflow-hidden flex flex-col items-center justify-center px-6 pt-24 pb-16">
+
+        {/* Spline 3D robot — background layer */}
+        <div
+          className="absolute inset-0"
+          style={{ zIndex: 0, pointerEvents: "none" }}
+        >
+          <SplineViewer url="https://prod.spline.design/kv2ymKWMhCi5eQnx/scene.splinecode" />
+        </div>
+
+        {/* Text content — centered on top */}
+        <div className="page-in w-full max-w-[1200px] mx-auto flex flex-col items-center text-center gap-8" style={{ position: "relative", zIndex: 3 }}>
 
           <div id="hero-prompt" className="font-mono text-xs" style={{ color: "var(--fg-dim)" }}>
             <span style={{ color: "var(--accent)" }}>$</span> whoami — The Nerd Company v1.0
@@ -269,17 +264,13 @@ export default function Home() {
             Construimos la inteligencia detrás de tu marca. Para equipos y fundadores que quieren crecer sin perder el control.
           </p>
 
-          <div id="hero-btns" className="flex flex-col sm:flex-row gap-3 mt-2">
+          <div id="hero-btns" className="flex flex-col sm:flex-row gap-3 mt-2 justify-center">
             <button onClick={() => scrollTo("#contacto")} className="btn-primary">
               Explorá cómo aplicamos IA →
             </button>
             <button onClick={() => scrollTo("#servicios")} className="btn-ghost">
               Ver casos reales
             </button>
-          </div>
-
-          <div id="hero-terminal" className="mt-8 max-w-lg">
-            <TerminalWindow />
           </div>
 
         </div>

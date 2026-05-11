@@ -57,16 +57,6 @@ export default function GsapAnimations() {
         ease: "power2.out",
       });
 
-      /* ── 6. Terminal lines type-in ── */
-      gsap.from(".gsap-terminal-line", {
-        opacity: 0,
-        x: -8,
-        stagger: 0.15,
-        duration: 0.38,
-        delay: 0.5,
-        ease: "power1.out",
-      });
-
       /* ── 7. Marquee (infinite horizontal scroll) ── */
       const marqueeEl = document.querySelector<HTMLElement>("#gsap-marquee-inner");
       if (marqueeEl) {
