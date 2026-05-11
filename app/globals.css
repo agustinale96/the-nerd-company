@@ -156,6 +156,33 @@ main, section, header, footer, div { position: relative; z-index: 2; }
 }
 .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
 
+/* Glitch title */
+@keyframes glitch {
+  0%, 82%, 100% { transform: translate(0); text-shadow: none; clip-path: none; }
+  83%  { transform: translate(-3px, 0);  text-shadow:  3px 0 rgba(255,0,60,.7); }
+  84%  { transform: translate( 3px, 0);  text-shadow: -3px 0 rgba(0,220,255,.7); }
+  85%  { transform: translate(0);        text-shadow: none; }
+  86%  { transform: translate( 2px,-1px); text-shadow: -2px 0 rgba(255,0,60,.7); clip-path: inset(20% 0 50% 0); }
+  87%  { transform: translate(-2px, 1px); text-shadow:  2px 0 rgba(0,220,255,.7); clip-path: inset(55% 0 10% 0); }
+  88%  { transform: translate(0);         text-shadow: none; clip-path: none; }
+}
+.glitch-title { animation: glitch 7s ease-in-out infinite; }
+
+/* Btn dark (for use on light/green backgrounds) */
+.btn-dark {
+  background: var(--bg);
+  color: var(--accent);
+  font-family: var(--font-space-mono), monospace;
+  font-size: 0.8rem;
+  padding: 12px 28px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.btn-dark:hover { opacity: 0.85; transform: translateY(-1px); }
+
 /* Btn ghost */
 .btn-ghost {
   background: transparent;
