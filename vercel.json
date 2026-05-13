@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/staging/:path*",
+      "destination": "https://tnc-git-staging-bizantinos-projects.vercel.app/staging/:path*"
+    }
+  ]
+}
