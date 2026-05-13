@@ -149,9 +149,11 @@ export default function AITakeover() {
     const onScroll = () => { if (window.scrollY > 40) fire(); };
     window.addEventListener("scroll", onScroll, { passive: true });
 
-    // Manual trigger from the demo banner (click = valid gesture, so unlock audio first)
+    // Manual trigger from the demo banner — reset so it can always retrigger
     const onManualTrigger = () => {
       window.removeEventListener("scroll", onScroll);
+      glitchFired.current = false;
+      setPhase("idle");
       ctx.resume().then(() => fire()).catch(() => fire());
     };
     window.addEventListener("tnc:demo:trigger", onManualTrigger);
