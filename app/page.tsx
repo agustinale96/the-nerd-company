@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import GsapAnimations from "./components/GsapAnimations";
 import ChatPanel from "./components/ChatPanel";
+import AITakeover from "./components/AITakeover";
 import Link from "next/link";
 import { T, type Lang } from "./lib/i18n";
 
@@ -44,6 +45,7 @@ export default function Home() {
   const [blurring, setBlurring]     = useState(false);
   const [copied, setCopied]         = useState(false);
   const [menuOpen, setMenuOpen]     = useState(false);
+  const [demoDone, setDemoDone]     = useState(false);
   const inputRef                    = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
@@ -53,6 +55,15 @@ export default function Home() {
     if (browser.startsWith("pt")) setLang("pt");
     else if (browser.startsWith("en")) setLang("en");
     // else stays "es"
+  }, []);
+
+  useEffect(() => {
+    // Check if demo was already completed in a previous visit
+    if (localStorage.getItem("tnc:demo:done")) setDemoDone(true);
+    // Listen for demo close event dispatched by AITakeover
+    const onDemoClosed = () => setDemoDone(true);
+    window.addEventListener("tnc:demo:closed", onDemoClosed);
+    return () => window.removeEventListener("tnc:demo:closed", onDemoClosed);
   }, []);
 
   function switchLang(l: Lang) {
@@ -137,17 +148,36 @@ export default function Home() {
   const LANGS: Lang[] = ["es", "en", "pt"];
 
   return (
-    <div className="flex flex-col">
+    <div id="page-root" className="flex flex-col">
 
       <GsapAnimations />
-      <ChatPanel lang={lang} />
+      {demoDone && <ChatPanel lang={lang} />}
+      <AITakeover />
+
+      {/* ── DEMO BANNER ── */}
+      <button
+        onClick={() => window.dispatchEvent(new CustomEvent("tnc:demo:trigger"))}
+        style={{
+          position: "fixed", top: 0, left: 0, right: 0, height: 36, zIndex: 9998,
+          background: "#C8FF6A",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          border: "none", cursor: "pointer",
+          transition: "background 0.15s",
+        }}
+        onMouseEnter={e => { e.currentTarget.style.background = "#d6ff7e"; }}
+        onMouseLeave={e => { e.currentTarget.style.background = "#C8FF6A"; }}
+      >
+        <span style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: "0.56rem", color: "#060c06", letterSpacing: "0.18em", textTransform: "uppercase", fontWeight: 700, pointerEvents: "none" }}>
+          AUTOMATION PROTOCOL DEMO
+        </span>
+      </button>
 
       {/* ── SCROLL PROGRESS BAR ── */}
-      <div id="gsap-progress" style={{ position: "fixed", top: 0, left: 0, height: 2, width: "100%", background: "var(--accent)", transformOrigin: "left center", transform: "scaleX(0)", zIndex: 9997 }} />
+      <div id="gsap-progress" style={{ position: "fixed", top: 36, left: 0, height: 2, width: "100%", background: "var(--accent)", transformOrigin: "left center", transform: "scaleX(0)", zIndex: 9997 }} />
 
       {/* ── HEADER ── */}
-      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4"
-        style={{ background: "rgba(6,12,6,0.9)", backdropFilter: "blur(12px)", borderBottom: "1px solid var(--border)" }}>
+      <header className="fixed left-0 right-0 z-50 flex items-center justify-between px-6 py-4"
+        style={{ top: 36, background: "rgba(6,12,6,0.9)", backdropFilter: "blur(12px)", borderBottom: "1px solid var(--border)" }}>
         <button onClick={() => scrollTo("#hero")} className="text-lg select-none" style={{ fontFamily: "var(--font-special-gothic)", color: "var(--fg)", letterSpacing: "0.03em" }}>
           The Nerd Company
         </button>
@@ -207,7 +237,7 @@ export default function Home() {
       )}
 
       {/* ── HERO ── */}
-      <section id="hero" className="min-h-[80vh] flex flex-col items-center justify-center px-6 pt-24 pb-16">
+      <section id="hero" className="min-h-[80vh] flex flex-col items-center justify-center px-6 pb-16" style={{ paddingTop: "calc(36px + 80px)" }}>
         <div className="page-in w-full max-w-[1200px] mx-auto flex flex-col items-center text-center gap-8">
           <div id="hero-prompt" className="font-mono text-xs" style={{ color: "var(--fg-dim)" }}>
             <span style={{ color: "var(--accent)" }}>$</span> {t.hero.prompt.replace("$ ", "")}
@@ -220,7 +250,6 @@ export default function Home() {
             {t.hero.sub}
           </p>
           <div id="hero-btns" className="flex flex-col sm:flex-row gap-3 mt-2 justify-center">
-            <button onClick={() => scrollTo("#contacto")} className="btn-primary">{t.hero.cta}</button>
           </div>
         </div>
       </section>
