@@ -66,6 +66,19 @@ main, section, header, footer, div { position: relative; z-index: 2; }
 
 ::selection { background: var(--accent); color: var(--bg); }
 
+/* Custom scrollbar */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(168,255,60,0.25) #060c06;
+}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #060c06; }
+::-webkit-scrollbar-thumb {
+  background: rgba(168,255,60,0.2);
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(168,255,60,0.45); }
+
 /* Terminal cursor blink */
 @keyframes blink { 0%,100%{ opacity:1 } 50%{ opacity:0 } }
 .cursor::after {

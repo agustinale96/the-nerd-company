@@ -2,7 +2,7 @@ export type Lang = "es" | "en" | "pt";
 
 export const T = {
   es: {
-    nav: { services: "Servicios", process: "Proceso", about: "Quiénes somos", cta: "> contacto" },
+    nav: { home: "Inicio", services: "Servicios", process: "Proceso", about: "Quiénes somos", cta: "> contacto" },
     hero: {
       prompt: "$ whoami — The Nerd Company v1.0",
       h1_1: "TU PRODUCTO,",
@@ -19,12 +19,14 @@ export const T = {
     },
     services: {
       label: "// servicios",
-      heading: "LO QUE HACEMOS",
+      heading: "NUESTROS SERVICIOS",
       cta: "Hablemos de tu producto →",
       items: [
-        { n: "01", verb: "INTEGRAR",  name: "IA aplicada a tu producto",         desc: "Incorporamos inteligencia artificial donde más impacto tiene en tu negocio. Desde recomendaciones personalizadas hasta decisiones automatizadas que escalan con vos." },
-        { n: "02", verb: "CONSTRUIR", name: "Productos digitales con IA integrada", desc: "Construimos productos que aprenden. MVPs y plataformas con IA integrada desde el primer sprint — no como feature, sino como núcleo del negocio." },
-        { n: "03", verb: "OPTIMIZAR", name: "Estrategia e integración de IA",     desc: "Te ayudamos a entender dónde la IA genera ventaja real en tu contexto — y lo construimos. Sin hype, sin soluciones genéricas. Con tu stack, tus datos, tu lógica." },
+        { n: "01", slug: "machine-learning", verb: "ENTRENAR",    name: "Modelos de Machine Learning",         tagline: "Predicción, clasificación y análisis sobre tus datos",           desc: "Modelos predictivos personalizados entrenados sobre tus datos para resolver problemas analíticos, comerciales y operacionales.",         headerName: "Predicción de Tendencias y Comportamiento", headerDesc: "Utilizamos tus datos históricos para anticipar qué va a pasar, como predecir cuándo un cliente dejará de comprarte o detectar anomalías en tus costos antes de que sean un problema.", category: "Modelos de Machine Learning" },
+        { n: "02", slug: "deep-learning",    verb: "DISEÑAR",     name: "Modelos Deep Learning",               tagline: "Redes neuronales para voz, visión y patrones complejos",          desc: "Redes neuronales avanzadas para voz, visión computacional, datos multimodales y automatización inteligente.",                            headerName: "Procesamiento de Imágenes y Audio",         headerDesc: "Implementamos sistemas que procesan imágenes, video y audio para automatizar tareas como control de stock por foto, detección de defectos en producción o transcripción automática de llamadas de soporte.", category: "Modelos de Deep Learning" },
+        { n: "03", slug: "llm-custom",       verb: "PERSONALIZAR",name: "Modelos LLM Custom",                  tagline: "IA de lenguaje entrenada en el contexto de tu empresa",           desc: "Modelos de lenguaje especializados entrenados sobre el conocimiento, procesos y contexto operacional de tu empresa.",                    headerName: "IA Entrenada con tus Datos",                headerDesc: "Creamos un modelo entrenado exclusivamente con tus manuales, contratos y procesos, para que cualquier empleado obtenga respuestas precisas al instante sin que tus datos salgan de la compañía.", category: "Modelos LLM Custom" },
+        { n: "04", slug: "agentes-ia",       verb: "ORQUESTAR",   name: "Agentes de Inteligencia Artificial",  tagline: "Automatización que razona, decide y actúa de forma autónoma",    desc: "Agentes autónomos con memoria y razonamiento multi-step que ejecutan tareas reales integrados con tus sistemas internos.",               headerName: "Automatización de Procesos con Agentes",    headerDesc: "Diseñamos asistentes digitales que no solo responden dudas, sino que ejecutan acciones: pueden agendar reuniones, procesar pedidos en tu sistema o gestionar reclamos de principio a fin sin intervención humana.", category: "Agentes de Inteligencia Artificial" },
+        { n: "05", slug: "end-to-end",       verb: "CONSTRUIR",   name: "Soluciones End-to-End de IA",         tagline: "De la arquitectura inicial al sistema productivo y monitoreado",  desc: "Plataformas AI completas: desde la arquitectura y los datos hasta el deployment productivo y el monitoreo continuo.",                    headerName: "Transformación Digital Integral con IA",    headerDesc: "Nos encargamos de todo el ciclo, desde identificar dónde la IA puede impactar tu negocio hasta dejar la solución funcionando y conectada con tus herramientas actuales.", category: "Soluciones End-to-End" },
       ],
     },
     process: {
@@ -77,7 +79,7 @@ export const T = {
   },
 
   en: {
-    nav: { services: "Services", process: "Process", about: "About us", cta: "> contact" },
+    nav: { home: "Home", services: "Services", process: "Process", about: "About us", cta: "> contact" },
     hero: {
       prompt: "$ whoami — The Nerd Company v1.0",
       h1_1: "YOUR PRODUCT,",
@@ -94,12 +96,14 @@ export const T = {
     },
     services: {
       label: "// services",
-      heading: "WHAT WE DO",
+      heading: "OUR SERVICES",
       cta: "Let's talk about your product →",
       items: [
-        { n: "01", verb: "INTEGRATE", name: "AI applied to your product",       desc: "We embed artificial intelligence where it has the most impact on your business — from personalized recommendations to automated decisions that scale with you." },
-        { n: "02", verb: "BUILD",     name: "Digital products with built-in AI", desc: "We build products that learn. MVPs and platforms with AI integrated from the first sprint — not as a feature, but as the core of the business." },
-        { n: "03", verb: "OPTIMIZE",  name: "AI strategy & integration",         desc: "We help you understand where AI creates real advantage in your context — and we build it. No hype, no generic solutions. With your stack, your data, your logic." },
+        { n: "01", slug: "machine-learning", verb: "TRAIN",       name: "Machine Learning Models",           tagline: "Prediction, classification and analysis on your data",              desc: "Custom predictive models trained on your data to solve analytical, commercial, and operational problems.",          headerName: "Trend & Behavior Prediction",                      headerDesc: "We use your historical data to anticipate what's going to happen — like predicting when a customer will stop buying from you, or detecting cost anomalies before they become a problem.", category: "Machine Learning Models" },
+        { n: "02", slug: "deep-learning",    verb: "DESIGN",      name: "Deep Learning Models",              tagline: "Neural networks for voice, vision and complex patterns",            desc: "Advanced neural networks for voice, computer vision, multimodal data, and intelligent automation.",                headerName: "Visual & Auditory Automation",                     headerDesc: "We implement systems that can 'see' and 'hear', enabling automation from inventory control via photos to automatic transcription and analysis of support calls.", category: "Deep Learning Models" },
+        { n: "03", slug: "llm-custom",       verb: "CUSTOMIZE",   name: "Custom LLM Models",                 tagline: "Language AI trained on your company's own context",                desc: "Specialized language models trained on your company's knowledge, processes, and operational context.",              headerName: "Private Data Consulting (Chat with Your Company)", headerDesc: "We create your own AI trained exclusively on your manuals, contracts, and processes, so any employee can get precise answers instantly — without your data leaving the company.", category: "Custom LLM Models" },
+        { n: "04", slug: "agentes-ia",       verb: "ORCHESTRATE", name: "AI Agents",                         tagline: "Automation that reasons, decides and acts autonomously",           desc: "Autonomous agents with memory and multi-step reasoning that execute real tasks integrated with your internal systems.", headerName: "Process Automation with Agents",                   headerDesc: "We design digital assistants that don't just answer questions — they execute actions: scheduling meetings, processing orders in your system, or handling claims from start to finish without human intervention.", category: "AI Agents" },
+        { n: "05", slug: "end-to-end",       verb: "BUILD",       name: "End-to-End AI Solutions",           tagline: "From initial architecture to monitored production system",          desc: "Complete AI platforms: from architecture and data engineering to production deployment and continuous monitoring.",  headerName: "Full Digital Transformation with AI",              headerDesc: "We handle the entire cycle — from identifying where AI can generate the most revenue in your business, to delivering the solution fully integrated with your current tools.", category: "End-to-End AI Solutions" },
       ],
     },
     process: {
@@ -152,7 +156,7 @@ export const T = {
   },
 
   pt: {
-    nav: { services: "Serviços", process: "Processo", about: "Quem somos", cta: "> contato" },
+    nav: { home: "Início", services: "Serviços", process: "Processo", about: "Quem somos", cta: "> contato" },
     hero: {
       prompt: "$ whoami — The Nerd Company v1.0",
       h1_1: "SEU PRODUTO,",
@@ -169,12 +173,14 @@ export const T = {
     },
     services: {
       label: "// serviços",
-      heading: "O QUE FAZEMOS",
+      heading: "NOSSOS SERVIÇOS",
       cta: "Vamos falar sobre seu produto →",
       items: [
-        { n: "01", verb: "INTEGRAR",  name: "IA aplicada ao seu produto",        desc: "Incorporamos inteligência artificial onde tem mais impacto no seu negócio — de recomendações personalizadas a decisões automatizadas que escalam com você." },
-        { n: "02", verb: "CONSTRUIR", name: "Produtos digitais com IA integrada", desc: "Construímos produtos que aprendem. MVPs e plataformas com IA integrada desde o primeiro sprint — não como feature, mas como núcleo do negócio." },
-        { n: "03", verb: "OTIMIZAR",  name: "Estratégia e integração de IA",      desc: "Ajudamos você a entender onde a IA gera vantagem real no seu contexto — e construímos isso. Sem hype, sem soluções genéricas. Com sua stack, seus dados, sua lógica." },
+        { n: "01", slug: "machine-learning", verb: "TREINAR",      name: "Modelos de Machine Learning",       tagline: "Predição, classificação e análise sobre seus dados",               desc: "Modelos preditivos personalizados treinados nos seus dados para resolver problemas analíticos, comerciais e operacionais.",   headerName: "Previsão de Tendências e Comportamento",                  headerDesc: "Utilizamos seus dados históricos para antecipar o que vai acontecer, como prever quando um cliente vai parar de comprar ou detectar anomalias nos seus custos antes que se tornem um problema.", category: "Modelos de Machine Learning" },
+        { n: "02", slug: "deep-learning",    verb: "DESENVOLVER",  name: "Modelos Deep Learning",             tagline: "Redes neurais para voz, visão e padrões complexos",                desc: "Redes neurais avançadas para voz, visão computacional, dados multimodais e automação inteligente.",                          headerName: "Automação Visual e Auditiva",                             headerDesc: "Implementamos sistemas que podem 'ver' e 'ouvir', permitindo automatizar desde o controle de estoque por fotos até a transcrição e análise automática de chamadas de suporte.", category: "Modelos de Deep Learning" },
+        { n: "03", slug: "llm-custom",       verb: "PERSONALIZAR", name: "Modelos LLM Custom",                tagline: "IA de linguagem treinada no contexto da sua empresa",              desc: "Modelos de linguagem especializados treinados no conhecimento, processos e contexto operacional da sua empresa.",            headerName: "Consultoria de Dados Privados (Chat com sua Empresa)",   headerDesc: "Criamos uma inteligência própria treinada exclusivamente com seus manuais, contratos e processos, para que qualquer funcionário possa obter respostas precisas na hora, sem que seus dados saiam da empresa.", category: "Modelos LLM Custom" },
+        { n: "04", slug: "agentes-ia",       verb: "ORQUESTRAR",   name: "Agentes de Inteligência Artificial",tagline: "Automação que raciocina, decide e age de forma autônoma",          desc: "Agentes autônomos com memória e raciocínio multi-step que executam tarefas reais integrados com seus sistemas internos.",   headerName: "Automação de Processos com Agentes",                     headerDesc: "Desenvolvemos assistentes digitais que não apenas respondem dúvidas, mas executam ações: podem agendar reuniões, processar pedidos no seu sistema ou gerenciar reclamações do início ao fim sem intervenção humana.", category: "Agentes de Inteligência Artificial" },
+        { n: "05", slug: "end-to-end",       verb: "CONSTRUIR",    name: "Soluções End-to-End de IA",         tagline: "Da arquitetura inicial ao sistema produtivo e monitorado",         desc: "Plataformas AI completas: da arquitetura e dados até o deployment produtivo e monitoramento contínuo.",                     headerName: "Transformação Digital Integral com IA",                  headerDesc: "Cuidamos de todo o ciclo, desde identificar onde a IA pode gerar mais receita no seu negócio até deixar a solução funcionando e conectada com suas ferramentas atuais.", category: "Soluções End-to-End de IA" },
       ],
     },
     process: {
