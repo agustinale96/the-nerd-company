@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Archivo, Special_Gothic_Condensed_One, VT323, Space_Mono } from "next/font/google";
+import { Archivo, Special_Gothic_Condensed_One, Space_Mono } from "next/font/google";
 import SmoothScroll from "./components/SmoothScroll";
+import CustomCursor from "./components/CustomCursor";
 import "./globals.css";
 
 const archivo = Archivo({ subsets: ["latin"], variable: "--font-archivo", display: "swap" });
 const specialGothic = Special_Gothic_Condensed_One({ weight: "400", subsets: ["latin"], variable: "--font-special-gothic", display: "swap" });
-const vt323 = VT323({ weight: "400", subsets: ["latin"], variable: "--font-vt323", display: "swap" });
 const spaceMono = Space_Mono({ weight: ["400", "700"], subsets: ["latin"], variable: "--font-space-mono", display: "swap" });
 
 export const metadata: Metadata = {
@@ -15,9 +15,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${archivo.variable} ${specialGothic.variable} ${vt323.variable} ${spaceMono.variable}`}>
+    <html lang="en" className={`${archivo.variable} ${specialGothic.variable} ${spaceMono.variable}`}>
       <body>
-        <div id="crt-scanline" style={{ position: "fixed", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(transparent, rgba(168,255,60,0.07) 50%, transparent)", pointerEvents: "none", zIndex: 9998, willChange: "transform" }} />
+        <CustomCursor />
         <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>

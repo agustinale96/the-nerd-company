@@ -1,50 +1,38 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import GsapAnimations from "./components/GsapAnimations";
-import ChatPanel from "./components/ChatPanel";
+import SiteHeader from "./components/SiteHeader";
 import Link from "next/link";
 import { T, type Lang } from "./lib/i18n";
 
-const STACK = ["React", "Next.js", "TypeScript", "Node.js", "PostgreSQL", "Supabase", "Redis", "AWS", "Vercel", "Figma", "Docker", "n8n", "Make", "Zapier"];
 const CONTACT_EMAIL = "hellothere@thenerdcompany.com";
-const FOUNDERS = [
-  { name: "Agustín Ale",       role: "Co-founder" },
-  { name: "Cristóbal Cantolla", role: "Co-founder" },
-];
-
-type FormStatus = "idle" | "loading" | "success" | "error";
-
-function Globe() {
-  return (
-    <svg viewBox="0 0 400 400" fill="none" className="w-full h-full" style={{ color: "var(--fg-dim)" }}>
-      <circle cx="200" cy="200" r="178" stroke="currentColor" strokeWidth="1" />
-      <ellipse cx="200" cy="200" rx="178" ry="60" stroke="currentColor" strokeWidth="0.6" />
-      <ellipse cx="200" cy="200" rx="178" ry="115" stroke="currentColor" strokeWidth="0.6" />
-      <ellipse cx="200" cy="200" rx="60" ry="178" stroke="currentColor" strokeWidth="0.6" />
-      <ellipse cx="200" cy="200" rx="115" ry="178" stroke="currentColor" strokeWidth="0.6" />
-      <line x1="22" y1="200" x2="378" y2="200" stroke="currentColor" strokeWidth="0.6" />
-      <line x1="200" y1="22" x2="200" y2="378" stroke="currentColor" strokeWidth="0.6" />
-      <line x1="70" y1="88" x2="330" y2="312" stroke="currentColor" strokeWidth="0.8" strokeDasharray="6 4" style={{ color: "var(--accent)", opacity: 0.5 }} />
-      <circle cx="260" cy="148" r="5" fill="var(--accent)" opacity="0.8" />
-      <circle cx="155" cy="230" r="3" fill="var(--accent)" opacity="0.5" />
-      <circle cx="300" cy="270" r="3" fill="var(--accent)" opacity="0.5" />
-      <line x1="260" y1="148" x2="155" y2="230" stroke="var(--accent)" strokeWidth="0.8" strokeDasharray="3 3" opacity="0.4" />
-      <line x1="155" y1="230" x2="300" y2="270" stroke="var(--accent)" strokeWidth="0.8" strokeDasharray="3 3" opacity="0.4" />
-    </svg>
-  );
-}
 
 export default function Home() {
-  const [lang, setLang]             = useState<Lang>("es");
-  const [step, setStep]             = useState(0);
-  const [values, setValues]         = useState(["", "", "", ""]);
-  const [formStatus, setFormStatus] = useState<FormStatus>("idle");
-  const [errorMsg, setErrorMsg]     = useState("");
-  const [blurring, setBlurring]     = useState(false);
-  const [copied, setCopied]         = useState(false);
-  const [menuOpen, setMenuOpen]     = useState(false);
-  const inputRef                    = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
+  const [lang, setLang]                     = useState<Lang>("es");
+  const [copied, setCopied]                 = useState(false);
+  const [wordIdx, setWordIdx]               = useState(0);
+  const [wordVisible, setWordVisible]       = useState(true);
+  const ctaTiltRef                          = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const card = ctaTiltRef.current;
+    if (!card) return;
+    const onMove = (e: MouseEvent) => {
+      const r = card.getBoundingClientRect();
+      const rx = ((e.clientY - r.top  - r.height / 2) / (r.height / 2)) * -4;
+      const ry = ((e.clientX - r.left - r.width  / 2) / (r.width  / 2)) *  4;
+      card.style.transition = "none";
+      card.style.transform  = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.02,1.02,1.02)`;
+    };
+    const onLeave = () => {
+      card.style.transition = "transform 0.55s cubic-bezier(0.23,1,0.32,1)";
+      card.style.transform  = "perspective(900px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)";
+    };
+    card.addEventListener("mousemove", onMove);
+    card.addEventListener("mouseleave", onLeave);
+    return () => { card.removeEventListener("mousemove", onMove); card.removeEventListener("mouseleave", onLeave); };
+  }, []);
 
   useEffect(() => {
     const saved = localStorage.getItem("tnc-lang") as Lang | null;
@@ -52,69 +40,19 @@ export default function Home() {
     const browser = navigator.language.toLowerCase();
     if (browser.startsWith("pt")) setLang("pt");
     else if (browser.startsWith("en")) setLang("en");
-    // else stays "es"
   }, []);
 
-  function switchLang(l: Lang) {
-    setLang(l);
-    localStorage.setItem("tnc-lang", l);
-  }
-
-  const t = T[lang];
-  const formSteps = t.contact.steps;
-  const current = formSteps[step];
-  const isLast  = step === formSteps.length - 1;
-  const value   = values[step];
-
-  const NAV_LINKS = [
-    { label: t.nav.services, href: "#servicios" },
-    { label: t.nav.process,  href: "#proceso" },
-    { label: t.nav.about,    href: "#quienes-somos" },
-  ];
-
-  function scrollTo(id: string) {
-    document.querySelector(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-    setMenuOpen(false);
-  }
-
-  function handleChange(v: string) {
-    const next = [...values]; next[step] = v; setValues(next);
-    if (formStatus === "error") setFormStatus("idle");
-  }
-
-  function validate(): boolean {
-    const v = value.trim();
-    if (!v) { setErrorMsg(t.contact.error_required); setFormStatus("error"); return false; }
-    if (step === 1 && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
-      setErrorMsg(t.contact.error_email); setFormStatus("error"); return false;
-    }
-    return true;
-  }
-
-  function transition(fn: () => void) {
-    setBlurring(true);
-    setTimeout(() => { fn(); setBlurring(false); setFormStatus("idle"); setTimeout(() => inputRef.current?.focus(), 50); }, 180);
-  }
-
-  function handleNext() { if (!validate()) return; transition(() => setStep((s) => s + 1)); }
-  function handleBack() { transition(() => setStep((s) => s - 1)); }
-
-  async function handleSubmit() {
-    if (!validate()) return;
-    setFormStatus("loading");
-    try {
-      const res = await fetch("/api/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: values[0].trim(), email: values[1].trim().toLowerCase(), company: values[2].trim(), message: values[3].trim() }),
-      });
-      if (!res.ok) throw new Error();
-      transition(() => setFormStatus("success"));
-    } catch {
-      setFormStatus("error");
-      setErrorMsg(t.contact.error_submit);
-    }
-  }
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setWordVisible(false);
+      setTimeout(() => {
+        setWordIdx(i => (i + 1) % t.hero.rotating.length);
+        setWordVisible(true);
+      }, 220);
+    }, 2200);
+    return () => clearInterval(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lang]);
 
   function copyEmail() {
     navigator.clipboard.writeText(CONTACT_EMAIL);
@@ -122,106 +60,68 @@ export default function Home() {
     setTimeout(() => setCopied(false), 2000);
   }
 
-  const inputStyle = {
-    background: "rgba(0,0,0,0.5)",
-    color: "var(--fg)",
-    border: `1px solid ${formStatus === "error" ? "#ff4d4f" : "var(--border)"}`,
-    caretColor: "var(--accent)",
-    fontFamily: "var(--font-space-mono), monospace",
-    fontSize: "0.8rem",
-    transition: "border-color 0.2s, box-shadow 0.2s",
-    borderRadius: 0,
-    outline: "none",
-  };
+  const t = T[lang];
 
-  const LANGS: Lang[] = ["es", "en", "pt"];
+  const CARD_STYLES = [
+    { bg: "linear-gradient(145deg, #111113 0%, #0e1b11 100%)", border: "rgba(190,243,101,0.14)" },
+    { bg: "linear-gradient(150deg, #111113 0%, #0d1a10 100%)", border: "rgba(190,243,101,0.11)" },
+    { bg: "linear-gradient(140deg, #111113 0%, #0f1d12 100%)", border: "rgba(190,243,101,0.16)" },
+    { bg: "linear-gradient(145deg, #111113 0%, #0c1810 100%)", border: "rgba(190,243,101,0.10)" },
+    { bg: "linear-gradient(150deg, #111113 0%, #101e13 100%)", border: "rgba(190,243,101,0.13)" },
+    { bg: "linear-gradient(140deg, #111113 0%, #0e1c12 100%)", border: "rgba(190,243,101,0.12)" },
+  ];
 
   return (
-    <div className="flex flex-col">
+    <div id="page-root" className="flex flex-col">
 
       <GsapAnimations />
-      <ChatPanel lang={lang} />
 
       {/* ── SCROLL PROGRESS BAR ── */}
       <div id="gsap-progress" style={{ position: "fixed", top: 0, left: 0, height: 2, width: "100%", background: "var(--accent)", transformOrigin: "left center", transform: "scaleX(0)", zIndex: 9997 }} />
 
-      {/* ── HEADER ── */}
-      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4"
-        style={{ background: "rgba(6,12,6,0.9)", backdropFilter: "blur(12px)", borderBottom: "1px solid var(--border)" }}>
-        <button onClick={() => scrollTo("#hero")} className="text-lg select-none" style={{ fontFamily: "var(--font-special-gothic)", color: "var(--fg)", letterSpacing: "0.03em" }}>
-          The Nerd Company
-        </button>
-        <nav className="hidden md:flex items-center gap-6">
-          {NAV_LINKS.map((l) => (
-            <button key={l.href} onClick={() => scrollTo(l.href)} className="font-mono text-xs uppercase tracking-widest transition-colors duration-200" style={{ color: "var(--fg-dim)" }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = "var(--fg)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = "var(--fg-dim)"; }}>
-              {l.label}
-            </button>
-          ))}
-        </nav>
-        <div className="hidden md:flex items-center gap-3">
-          {/* Language switcher */}
-          <div className="flex items-center" style={{ border: "1px solid var(--border)" }}>
-            {LANGS.map((l) => (
-              <button key={l} onClick={() => switchLang(l)}
-                className="font-mono text-xs uppercase"
-                style={{
-                  padding: "4px 8px",
-                  color: lang === l ? "var(--bg)" : "var(--fg-muted)",
-                  background: lang === l ? "var(--accent)" : "transparent",
-                  transition: "background 0.15s, color 0.15s",
-                  letterSpacing: "0.05em",
-                }}>
-                {l}
-              </button>
-            ))}
-          </div>
-          <Link href="/contacto" className="btn-primary text-xs" style={{ padding: "6px 16px" }}>
-            {t.nav.cta}
-          </Link>
-        </div>
-        <button className="md:hidden font-mono text-sm" style={{ color: "var(--fg-dim)" }} onClick={() => setMenuOpen(!menuOpen)}>
-          {menuOpen ? "[✕]" : "[☰]"}
-        </button>
-      </header>
-
-      {menuOpen && (
-        <div className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 md:hidden"
-          style={{ background: "rgba(6,12,6,0.98)", backdropFilter: "blur(20px)" }}>
-          {NAV_LINKS.map((l) => (
-            <button key={l.href} onClick={() => scrollTo(l.href)} className="font-display text-4xl" style={{ color: "var(--fg)" }}>
-              {l.label}
-            </button>
-          ))}
-          <div className="flex items-center gap-2 mt-4">
-            {LANGS.map((l) => (
-              <button key={l} onClick={() => { switchLang(l); setMenuOpen(false); }}
-                className="font-mono text-sm uppercase"
-                style={{ padding: "6px 14px", color: lang === l ? "var(--bg)" : "var(--fg-muted)", background: lang === l ? "var(--accent)" : "transparent", border: "1px solid var(--border)" }}>
-                {l}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
+      <SiteHeader onLangChange={setLang} />
 
       {/* ── HERO ── */}
-      <section id="hero" className="min-h-[80vh] flex flex-col items-center justify-center px-6 pt-24 pb-16">
-        <div className="page-in w-full max-w-[1200px] mx-auto flex flex-col items-center text-center gap-8">
-          <div id="hero-prompt" className="font-mono text-xs" style={{ color: "var(--fg-dim)" }}>
-            <span style={{ color: "var(--accent)" }}>$</span> {t.hero.prompt.replace("$ ", "")}
-          </div>
-          <h1 id="hero-h1" className="font-display text-6xl sm:text-7xl md:text-8xl leading-none" style={{ color: "var(--fg)" }}>
-            {t.hero.h1_1}<br />
-            <span className="highlight-bar">{t.hero.h1_2}</span><span className="cursor" />
+      <section id="hero" style={{ height: "80vh", minHeight: 480, position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+        {/* Subtle dot grid */}
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(rgba(255,255,255,0.045) 1.5px, transparent 1.5px)", backgroundSize: "36px 36px", pointerEvents: "none", zIndex: 0 }} />
+        {/* Soft green gradient */}
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 65% 55% at 50% 92%, rgba(74,222,128,0.14) 0%, transparent 65%), radial-gradient(ellipse 45% 35% at 85% 10%, rgba(34,197,94,0.06) 0%, transparent 55%)", pointerEvents: "none", zIndex: 0 }} />
+
+        <div className="page-in" style={{ width: "80%", zIndex: 1, textAlign: "center" }}>
+          <p id="hero-prompt" style={{ fontFamily: "var(--font-special-gothic)", fontSize: "clamp(0.9rem, 1.2vw, 1.1rem)", color: "var(--fg-muted)", letterSpacing: "0.08em", marginBottom: 28 }}>
+            The Nerd Company
+          </p>
+          <h1 className="font-display leading-none" style={{ fontSize: "clamp(2.5rem, 6.5vw, 5rem)", color: "var(--fg)" }}>
+            <span id="hero-line-1" style={{ display: "block" }}>
+              {t.hero.h1_1}{" "}
+              <span style={{
+                color: "var(--accent)",
+                display: "inline-block",
+                opacity: wordVisible ? 1 : 0,
+                transform: wordVisible ? "translateY(0)" : "translateY(-8px)",
+                transition: "opacity 0.22s ease, transform 0.22s ease",
+              }}>
+                {t.hero.rotating[wordIdx]}
+              </span>
+              ,
+            </span>
+            <span id="hero-line-2" style={{ display: "block" }}>
+              <span className="highlight-bar">{t.hero.h1_2}</span>
+            </span>
           </h1>
-          <p id="hero-sub" className="text-sm sm:text-base leading-relaxed max-w-xl" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace" }}>
+          <p id="hero-sub" className="text-base leading-relaxed mt-6" style={{ color: "var(--fg-dim)", maxWidth: 520, margin: "24px auto 0" }}>
             {t.hero.sub}
           </p>
-          <div id="hero-btns" className="flex flex-col sm:flex-row gap-3 mt-2 justify-center">
-            <button onClick={() => scrollTo("#contacto")} className="btn-primary">{t.hero.cta}</button>
+          <div id="hero-btns" className="flex items-center justify-center mt-10">
+            <Link href="/contact" className="btn-primary">{t.nav.cta}</Link>
           </div>
+        </div>
+
+        {/* Scroll indicator */}
+        <div style={{ position: "absolute", bottom: 32, left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: 6, zIndex: 2 }}>
+          <span style={{ fontSize: "0.6rem", color: "var(--fg-muted)", letterSpacing: "0.14em", textTransform: "uppercase" }}>scroll</span>
+          <span className="scroll-arrow" style={{ color: "var(--fg-muted)", fontSize: "0.9rem", lineHeight: 1 }}>↓</span>
         </div>
       </section>
 
@@ -231,8 +131,8 @@ export default function Home() {
           {[0, 1].map((copy) => (
             <div key={copy} className="flex items-center shrink-0">
               {t.marquee.map((w, j) => (
-                <span key={`${copy}-${j}`} className="font-mono text-xs uppercase tracking-widest shrink-0"
-                  style={{ color: w === "▸" ? "var(--accent)" : "var(--fg-dim)", padding: "0 20px" }}>
+                <span key={`${copy}-${j}`} className="text-xs uppercase tracking-widest shrink-0"
+                  style={{ color: w === "▸" ? "var(--accent)" : "var(--fg-muted)", padding: "0 20px", fontFamily: "var(--font-space-mono), monospace" }}>
                   {w}
                 </span>
               ))}
@@ -241,191 +141,193 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ── QUOTE ── */}
-      <section style={{ background: "var(--bg-alt)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
-        <div className="w-full max-w-[1200px] mx-auto px-6 py-20 flex flex-col items-center gap-10 text-center">
-          <div id="quote-text" className="flex flex-col items-center gap-4">
-            <p className="gsap-label font-mono text-xs" style={{ color: "var(--fg-dim)" }}>{t.quote.label}</p>
-            <blockquote className="font-display text-4xl sm:text-5xl leading-tight" style={{ color: "var(--fg)" }}>
-              {t.quote.text}<br />
-              <span className="highlight-bar">{t.quote.highlight}</span>
-            </blockquote>
-            <p className="text-xs" style={{ color: "var(--fg-muted)", fontFamily: "var(--font-space-mono), monospace" }}>
-              {t.quote.sub}
-            </p>
-          </div>
-          <div id="globe-wrap" className="w-72 h-72"><Globe /></div>
+      {/* ── SOLUTIONS STACKED CARDS ── */}
+      <section id="soluciones" style={{ paddingBottom: 120, background: "var(--bg)" }}>
+        <div style={{ width: "80%", margin: "0 auto", paddingTop: 96, paddingBottom: 48 }}>
+          <p className="text-xs mb-3 uppercase tracking-widest" style={{ color: "var(--fg-muted)", textAlign: "center" }}>{t.solutions.label}</p>
+          <h2 className="font-display leading-tight" style={{ fontSize: "clamp(1.44rem, 3vw, 2.488rem)", color: "var(--accent)" }}>
+            {t.solutions.heading_1} <span className="highlight-bar">{t.solutions.heading_2}</span>
+          </h2>
         </div>
-      </section>
+        {t.solutions.items.map((s, i) => {
+          const topOffset = 80 + i * 18;
+          const cardStyle = CARD_STYLES[i % CARD_STYLES.length];
+          return (
+            <div
+              key={s.n}
+              className="gsap-srv-card"
+              style={{
+                position: "sticky",
+                top: topOffset,
+                zIndex: 10 + i,
+                margin: "0 auto",
+                width: "80%",
+                borderRadius: 16,
+                background: cardStyle.bg,
+                border: `1px solid ${cardStyle.border}`,
+                padding: "clamp(36px, 5vw, 60px) clamp(40px, 5vw, 80px)",
+                display: "flex",
+                flexDirection: "column",
+                gap: 32,
+              }}
+            >
+              <span style={{ fontSize: "0.68rem", letterSpacing: "0.07em", textTransform: "uppercase", color: "var(--accent)" }}>
+                {s.name}
+              </span>
+              <h3 className="font-display" style={{ fontSize: "clamp(1.6rem, 3vw, 2.8rem)", color: "var(--fg)", lineHeight: 1.2, fontStyle: "italic" }}>
+                {s.problem}
+              </h3>
 
-      {/* ── SERVICES ── */}
-      <section id="servicios" className="services-texture px-6 py-24">
-        <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-12">
-          <div>
-            <p className="gsap-label font-mono text-xs mb-3" style={{ color: "rgba(168,255,60,0.4)" }}>{t.services.label}</p>
-            <h2 className="gsap-heading glitch-title font-display text-5xl sm:text-6xl" style={{ color: "var(--accent)" }}>{t.services.heading}</h2>
-          </div>
-          <div style={{ borderTop: "1px solid rgba(168,255,60,0.15)" }}>
-            {t.services.items.map((s) => (
-              <div key={s.n} className="gsap-srv-row py-10 flex gap-6" style={{ borderBottom: "1px solid rgba(168,255,60,0.15)" }}>
-                <span className="font-mono text-xs pt-1 shrink-0" style={{ color: "rgba(168,255,60,0.35)", minWidth: 24 }}>{s.n}</span>
-                <div>
-                  <div className="font-display text-4xl sm:text-5xl leading-none mb-3" style={{ color: "var(--fg)" }}>{s.verb}</div>
-                  <h3 className="font-mono text-sm font-bold mb-2 uppercase tracking-wider" style={{ color: "var(--fg-dim)" }}>{s.name}</h3>
-                  <p style={{ color: "rgba(168,255,60,0.45)", fontFamily: "var(--font-space-mono), monospace", fontSize: "0.75rem", lineHeight: 1.7 }}>{s.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div>
-            <button onClick={() => scrollTo("#contacto")} className="btn-primary">{t.services.cta}</button>
-          </div>
-        </div>
-      </section>
-
-      {/* ── PROCESS ── */}
-      <section id="proceso" className="px-6 py-24" style={{ background: "var(--bg-alt)", borderTop: "1px solid var(--border)" }}>
-        <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-12">
-          <div>
-            <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>{t.process.label}</p>
-            <h2 className="gsap-heading font-display text-5xl sm:text-6xl" style={{ color: "var(--fg)" }}>{t.process.heading}</h2>
-          </div>
-          <div className="flex flex-col" style={{ position: "relative" }}>
-            <div style={{ position: "absolute", left: 11, top: 12, bottom: 12, width: 1, background: "var(--border)" }} />
-            {t.process.items.map((p) => (
-              <div key={p.n} className="gsap-proc-card flex gap-6 pb-10" style={{ position: "relative" }}>
-                <div style={{ width: 23, height: 23, borderRadius: "50%", background: "var(--bg-alt)", border: "1px solid var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, zIndex: 1 }}>
-                  <div style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--accent)" }} />
-                </div>
-                <div className="flex flex-col gap-2 pt-0.5">
-                  <div className="flex items-center gap-3">
-                    <span className="font-mono text-xs" style={{ color: "var(--accent)" }}>{p.n}</span>
-                    <h3 className="font-mono text-sm font-bold uppercase tracking-wider" style={{ color: "var(--fg)" }}>{p.name}</h3>
-                  </div>
-                  <p style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace", fontSize: "0.72rem", lineHeight: 1.7, maxWidth: 520 }}>{p.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── STACK + QUIÉNES SOMOS ── */}
-      <section id="quienes-somos" className="px-6 py-24" style={{ borderTop: "1px solid var(--border)" }}>
-        <div className="w-full max-w-[1200px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-            <div id="stack" className="flex flex-col gap-8">
-              <div>
-                <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>{t.stack.label}</p>
-                <h2 className="gsap-heading font-display text-4xl sm:text-5xl" style={{ color: "var(--fg)" }}>{t.stack.heading}</h2>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {STACK.map((s) => <span key={s} className="gsap-stack-tag tech-tag">{s}</span>)}
-              </div>
-              <p id="stack-desc" className="text-xs leading-relaxed" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace" }}>
-                {t.stack.desc}
-              </p>
-            </div>
-            <div className="flex flex-col gap-8">
-              <div>
-                <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>{t.about.label}</p>
-                <h2 className="gsap-heading font-display text-4xl sm:text-5xl leading-none" style={{ color: "var(--fg)" }}>
-                  {t.about.heading1} <span className="highlight-bar">{t.about.heading2}</span>
-                </h2>
-              </div>
-              <p id="quienes-body" className="text-xs leading-relaxed" style={{ color: "var(--fg-dim)", fontFamily: "var(--font-space-mono), monospace" }}>
-                {t.about.body}
-              </p>
-              <div className="grid grid-cols-2 gap-3">
-                {FOUNDERS.map((f) => (
-                  <div key={f.name} className="flex flex-col gap-1 p-4" style={{ border: "1px solid var(--border)", background: "rgba(0,0,0,0.3)" }}>
-                    <span className="font-mono text-xs font-bold" style={{ color: "var(--fg)" }}>{f.name}</span>
-                    <span className="font-mono text-xs uppercase tracking-widest" style={{ color: "var(--accent)", fontSize: "0.6rem" }}>{f.role}</span>
-                  </div>
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                {s.tags.map((tag, ti) => (
+                  <span key={tag} className="flex items-center gap-5">
+                    <span style={{ fontSize: "0.78rem", color: "var(--fg-muted)", letterSpacing: "0.02em" }}>{tag}</span>
+                    {ti < s.tags.length - 1 && <span style={{ color: "var(--fg-muted)", opacity: 0.3, fontSize: "0.65rem" }}>|</span>}
+                  </span>
                 ))}
               </div>
+
+              <div className="flex gap-4 items-start" style={{ maxWidth: 600 }}>
+                <span style={{ color: "var(--accent)", fontSize: "1rem", lineHeight: 1.8, flexShrink: 0, marginTop: 3 }}>✳</span>
+                <p style={{ color: "var(--fg-dim)", fontSize: "1rem", lineHeight: 1.8 }}>{s.desc}</p>
+              </div>
+
+              <div>
+                <Link href={s.link} className="btn-primary" style={{ fontSize: "0.85rem" }}>
+                  {t.solutions.linkLabel}
+                </Link>
+              </div>
             </div>
+          );
+        })}
+
+      </section>
+
+      {/* ── SOLUTIONS CTA CARD (standalone) ── */}
+      <section style={{ background: "var(--bg)", paddingBottom: 80 }}>
+        <div
+          ref={ctaTiltRef}
+          className="cta-card-accent"
+          style={{
+            width: "80%",
+            margin: "0 auto",
+            borderRadius: 16,
+            padding: "clamp(36px, 5vw, 60px) clamp(40px, 5vw, 80px)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 16,
+            textAlign: "center",
+            willChange: "transform",
+            transformStyle: "preserve-3d",
+          }}
+        >
+          <h2 className="font-display" style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)", color: "#0a1a00", lineHeight: 1.15 }}>
+            {t.solutions.ctaCard.heading}
+          </h2>
+          <p style={{ fontSize: "1rem", color: "#1a3300", lineHeight: 1.7, maxWidth: 520 }}>
+            {t.solutions.ctaCard.heading_2}
+          </p>
+          <div style={{ marginTop: 8 }}>
+            <Link href="/contact"
+              style={{ display: "inline-block", background: "#0a1a00", color: "#bef365", padding: "12px 28px", borderRadius: 8, fontSize: "0.9rem", fontWeight: 500, textDecoration: "none" }}>
+              {t.solutions.ctaCard.button}
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* ── CONTACT ── */}
-      <section id="contacto" className="px-6 py-24" style={{ borderTop: "1px solid var(--border)" }}>
-        <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-10">
-          {formStatus === "success" ? (
-            <div className="page-in flex flex-col gap-4 py-12">
-              <span className="font-mono text-xs" style={{ color: "var(--accent)" }}>{t.contact.success_label}</span>
-              <h2 className="font-display text-5xl" style={{ color: "var(--fg)" }}>{t.contact.success_heading}</h2>
-              <p className="font-mono text-xs" style={{ color: "var(--fg-dim)" }}>{t.contact.success_sub}</p>
-            </div>
-          ) : (
-            <>
-              <div>
-                <p className="gsap-label font-mono text-xs mb-3" style={{ color: "var(--fg-dim)" }}>{t.contact.label}</p>
-                <h2 id="contact-heading" className="font-display text-5xl sm:text-6xl leading-none" style={{ color: "var(--fg)" }}>
-                  <span className="cursor">{t.contact.heading}</span>
-                </h2>
+      {/* ── AUDIT MODULE ── */}
+      <section style={{ background: "var(--bg-alt)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
+        <div style={{ width: "80%", margin: "0 auto", padding: "clamp(64px, 8vw, 100px) 0", display: "flex", gap: "clamp(72px, 9vw, 120px)", alignItems: "stretch" }}>
+          <div className="flex flex-col gap-6" style={{ flex: "0 0 38%", alignItems: "flex-start", justifyContent: "flex-start" }}>
+            <p className="text-xs uppercase tracking-widest" style={{ color: "var(--fg-muted)" }}>{t.audit.label}</p>
+            <h2 className="font-display" style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)", color: "var(--fg)", lineHeight: 1.15, textAlign: "left" }}>
+              {t.audit.heading}
+            </h2>
+            <p style={{ color: "var(--fg-dim)", fontSize: "1rem", lineHeight: 1.75, textAlign: "left" }}>
+              {t.audit.sub}
+            </p>
+            <Link href="/rescue"
+              style={{ display: "inline-block", background: "var(--accent)", color: "#0a1a00", padding: "10px 24px", borderRadius: 6, fontSize: "0.85rem", fontWeight: 500, textDecoration: "none" }}>
+              {t.audit.button}
+            </Link>
+          </div>
+          <div style={{ flex: 1, borderRadius: 12, overflow: "hidden", minHeight: 320 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/landing-foto.png" alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+          </div>
+        </div>
+      </section>
+
+      {/* ── TECHNOLOGY DETAIL ── */}
+      <section id="tecnologia" className="py-24" style={{ background: "var(--bg)" }}>
+        <div style={{ width: "80%", margin: "0 auto" }} className="flex flex-col gap-12">
+          <div>
+            <p className="gsap-label text-xs mb-3 uppercase tracking-widest" style={{ color: "var(--fg-muted)" }}>{t.services.label}</p>
+            <h2 className="gsap-heading font-display leading-tight" style={{ fontSize: "clamp(1.44rem, 3vw, 2.488rem)", color: "var(--accent)" }}>
+              {t.services.heading_1} <span className="highlight-bar">{t.services.heading_2}</span>
+            </h2>
+          </div>
+          <div style={{ borderTop: "1px solid var(--border)" }}>
+            {t.services.items.map((s) => (
+              <div
+                key={s.slug}
+                className="gsap-srv-detail flex gap-6 items-start"
+                style={{ borderBottom: "1px solid var(--border)", padding: "28px 0" }}
+              >
+                <span style={{
+                  color: "var(--fg-muted)",
+                  fontSize: "0.7rem", minWidth: 32, flexShrink: 0, paddingTop: 4,
+                  fontFamily: "var(--font-space-mono), monospace",
+                }}>{s.n}</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <h3 className="font-display leading-tight" style={{
+                    fontSize: "clamp(1.2rem, 2vw, 2.074rem)",
+                    color: "var(--fg)",
+                    marginBottom: 8,
+                  }}>{s.headerName}</h3>
+                  <p style={{
+                    color: "var(--fg-dim)",
+                    fontSize: "0.875rem", lineHeight: 1.7, marginBottom: 10,
+                  }}>{s.headerDesc}</p>
+                  <span className="tech-tag">{s.category}</span>
+                </div>
               </div>
-              <div id="contact-steps" className="flex gap-4 overflow-x-auto pb-1">
-                {formSteps.map((s, i) => {
-                  const isActive = i === step, isDone = i < step;
-                  return (
-                    <div key={s.id} className="flex flex-col items-center gap-1.5 shrink-0" style={{ minWidth: 60 }}>
-                      <div className="w-7 h-7 flex items-center justify-center font-mono text-xs"
-                        style={{ background: isActive || isDone ? "var(--accent)" : "transparent", color: isActive || isDone ? "var(--bg)" : "var(--fg-dim)", border: isActive || isDone ? "none" : "1px solid var(--border)", transition: "background 0.3s" }}>
-                        {isDone ? "✓" : s.id}
-                      </div>
-                      <span className="font-mono text-center leading-tight" style={{ color: isActive ? "var(--fg)" : "var(--fg-muted)", fontSize: "0.6rem", textTransform: "uppercase" }}>{s.label}</span>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className={`flex flex-col gap-3 step-content${blurring ? " blurring" : ""}`}>
-                <label className="font-mono text-xs uppercase tracking-widest" style={{ color: "var(--fg-dim)" }}>
-                  <span style={{ color: "var(--accent)" }}>›</span> {current.label}
-                </label>
-                {current.type === "textarea" ? (
-                  <textarea ref={(el) => { inputRef.current = el; }} value={value} onChange={(e) => handleChange(e.target.value)}
-                    placeholder={current.placeholder} rows={5} disabled={formStatus === "loading"}
-                    className="w-full px-4 py-3 resize-none" style={inputStyle}
-                    onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(168,255,60,0.4)"; e.currentTarget.style.boxShadow = "0 0 0 1px rgba(168,255,60,0.15)"; }}
-                    onBlur={(e)  => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.boxShadow = "none"; }} />
-                ) : (
-                  <input ref={(el) => { inputRef.current = el; }} type={current.type} value={value} onChange={(e) => handleChange(e.target.value)}
-                    placeholder={current.placeholder} disabled={formStatus === "loading"}
-                    onKeyDown={(e) => { if (e.key === "Enter") { isLast ? handleSubmit() : handleNext(); } }}
-                    className="w-full px-4 py-3" style={inputStyle}
-                    onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(168,255,60,0.4)"; e.currentTarget.style.boxShadow = "0 0 0 1px rgba(168,255,60,0.15)"; }}
-                    onBlur={(e)  => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.boxShadow = "none"; }} />
-                )}
-                {formStatus === "error" && <p className="font-mono text-xs" style={{ color: "#ff4d4f" }}>{errorMsg}</p>}
-              </div>
-              <div className={`flex items-center ${step === 0 ? "justify-end" : "justify-between"}`}>
-                {step > 0 && <button onClick={handleBack} className="btn-ghost">{t.contact.back}</button>}
-                <button onClick={isLast ? handleSubmit : handleNext} disabled={formStatus === "loading"} className="btn-primary disabled:opacity-50">
-                  {formStatus === "loading" ? t.contact.sending : isLast ? t.contact.send : t.contact.next}
-                </button>
-              </div>
-              <p className="font-mono text-xs" style={{ color: "var(--fg-muted)" }}>{t.contact.fine_print}</p>
-            </>
-          )}
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA ── */}
+      <section style={{ background: "var(--bg-alt)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
+        <div style={{ width: "80%", margin: "0 auto", paddingTop: 96, paddingBottom: 96 }} className="flex flex-col gap-6">
+          <h2 id="cta-heading" className="font-display leading-none" style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}>
+            <span className="highlight-bar">{t.cta.heading_1} {t.cta.heading_2}</span>
+          </h2>
+          <p style={{ color: "var(--fg-dim)", fontSize: "1rem", lineHeight: 1.7, textAlign: "center" }}>{t.cta.sub}</p>
+          <div className="mt-2" style={{ textAlign: "center" }}>
+            <Link href="/contact" className="btn-primary" style={{ fontSize: "0.9rem", padding: "12px 28px" }}>
+              {t.cta.button}
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="px-6 py-10" style={{ background: "var(--bg-alt)", borderTop: "1px solid var(--border)" }}>
-        <div className="max-w-[1200px] mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+      <footer className="py-10" style={{ background: "var(--bg-alt)", borderTop: "1px solid var(--border)" }}>
+        <div style={{ width: "80%", margin: "0 auto" }} className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div className="flex flex-col gap-1">
             <span style={{ fontFamily: "var(--font-special-gothic)", fontSize: "1rem", letterSpacing: "0.03em", color: "var(--fg)" }}>The Nerd Company</span>
-            <span className="font-mono text-xs" style={{ color: "var(--fg-muted)" }}>{t.footer.location}</span>
+            <span className="text-xs" style={{ color: "var(--fg-muted)" }}>{t.footer.location}</span>
           </div>
           <div className="flex flex-col items-start sm:items-end gap-1">
-            <button onClick={copyEmail} className="font-mono text-xs transition-colors duration-200" style={{ color: copied ? "var(--accent)" : "var(--fg-dim)" }}
+            <button onClick={copyEmail} className="text-sm transition-colors duration-200" style={{ color: copied ? "var(--accent)" : "var(--fg-dim)" }}
               onMouseEnter={(e) => { if (!copied) e.currentTarget.style.color = "var(--fg)"; }}
               onMouseLeave={(e) => { if (!copied) e.currentTarget.style.color = "var(--fg-dim)"; }}>
               {copied ? t.footer.copied : CONTACT_EMAIL}
             </button>
-            <span className="font-mono text-xs" style={{ color: "var(--fg-muted)" }}>
+            <span className="text-xs" style={{ color: "var(--fg-muted)" }}>
               {t.footer.open} · © {new Date().getFullYear()}
             </span>
           </div>

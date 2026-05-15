@@ -199,6 +199,7 @@ export default function ChatPanel({ lang = "es" }: { lang?: Lang }) {
             right: 0,
             top: "50%",
             transform: "translateY(-50%)",
+            zIndex: 9999,
             background: "var(--bg)",
             border: "1px solid var(--border)",
             borderRight: "none",
@@ -210,7 +211,6 @@ export default function ChatPanel({ lang = "es" }: { lang?: Lang }) {
             textOrientation: "mixed",
             padding: "14px 8px",
             cursor: "pointer",
-            zIndex: 9990,
             textTransform: "uppercase",
           }}
         >
@@ -223,14 +223,14 @@ export default function ChatPanel({ lang = "es" }: { lang?: Lang }) {
         style={{
           position: "fixed",
           right: 0,
-          top: 0,
+          top: 36,
           bottom: 0,
           width: 360,
           background: "rgba(6,12,6,0.97)",
           borderLeft: "1px solid var(--border)",
           display: "flex",
           flexDirection: "column",
-          zIndex: 9990,
+          zIndex: 9999,
           transform: open ? "translateX(0)" : "translateX(100%)",
           transition: "transform 0.35s cubic-bezier(0.16,1,0.3,1)",
           backdropFilter: "blur(8px)",
