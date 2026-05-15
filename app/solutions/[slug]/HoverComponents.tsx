@@ -4,17 +4,17 @@ import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import type { Service, WhatYouNeedItem, UseCaseIndustry } from "../data";
+import type { Service, WhatYouNeedItem, UseCaseIndustry, WhenYouNeedItRichItem } from "../data";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export function BackLink() {
   return (
-    <Link href="/#servicios" className="font-mono text-xs uppercase tracking-widest"
+    <Link href="/solutions" className="font-mono text-xs uppercase tracking-widest"
       style={{ color: "var(--fg-dim)" }}
       onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--fg)"; }}
       onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--fg-dim)"; }}>
-      ← Servicios
+      ← Solutions
     </Link>
   );
 }
@@ -24,7 +24,7 @@ export function ServiceCard({ s }: { s: Service }) {
 
   return (
     <Link
-      href={`/servicios/${s.slug}`}
+      href={`/solutions/${s.slug}`}
       style={{
         display: "flex",
         flexDirection: "column",
@@ -35,39 +35,12 @@ export function ServiceCard({ s }: { s: Service }) {
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}>
-      {/* image */}
-      {s.serviceImage && (
-        <div style={{ position: "relative", aspectRatio: "16/9", overflow: "hidden" }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={s.serviceImage}
-            alt=""
-            aria-hidden
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              display: "block",
-              filter: `brightness(${hovered ? 0.6 : 0.45}) saturate(0.6)`,
-              transform: hovered ? "scale(1.04)" : "scale(1)",
-              transition: "filter 0.35s ease, transform 0.35s ease",
-            }}
-          />
-          <div style={{
-            position: "absolute", inset: 0,
-            background: "linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.7) 100%)",
-          }} />
-          <span
-            className="font-mono"
-            style={{
-              position: "absolute", bottom: "0.6rem", left: "0.75rem",
-              fontSize: "0.65rem", color: "var(--accent)", opacity: 0.6,
-              letterSpacing: "0.06em",
-            }}>
-            {s.n}
-          </span>
-        </div>
-      )}
+      {/* image placeholder */}
+      <div style={{ position: "relative", aspectRatio: "16/9", overflow: "hidden", background: "rgba(255,255,255,0.02)", borderBottom: "1px dashed var(--border)" }}>
+        <span className="font-mono" style={{ position: "absolute", bottom: "0.6rem", left: "0.75rem", fontSize: "0.65rem", color: "var(--accent)", opacity: 0.4, letterSpacing: "0.06em" }}>
+          {s.n}
+        </span>
+      </div>
 
       {/* text */}
       <div style={{ padding: "1rem 1.1rem 1.25rem", display: "flex", flexDirection: "column", gap: "0.4rem" }}>
@@ -120,7 +93,6 @@ export function WhenYouNeedItList({ items }: { items: string[] }) {
           </span>
           <p
             style={{
-              fontFamily: "var(--font-space-mono), monospace",
               fontSize: "1rem",
               color: active === i ? "var(--fg)" : "var(--fg-dim)",
               lineHeight: 1.75,
@@ -129,6 +101,61 @@ export function WhenYouNeedItList({ items }: { items: string[] }) {
             }}>
             {item}
           </p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function WhenYouNeedItRich({ items }: { items: WhenYouNeedItRichItem[] }) {
+  const [active, setActive] = useState<number | null>(null);
+
+  return (
+    <div>
+      {items.map((item, i) => (
+        <div
+          key={i}
+          onMouseEnter={() => setActive(i)}
+          onMouseLeave={() => setActive(null)}
+          style={{
+            display: "flex",
+            gap: "1.75rem",
+            alignItems: "flex-start",
+            padding: "1.75rem 0",
+            borderBottom: "1px solid var(--border)",
+            cursor: "default",
+          }}>
+          <span style={{
+            fontFamily: "var(--font-special-gothic, sans-serif)",
+            fontSize: "clamp(2rem, 4vw, 3rem)",
+            lineHeight: 1,
+            color: active === i ? "rgba(168,255,60,0.45)" : "rgba(168,255,60,0.07)",
+            flexShrink: 0,
+            minWidth: "3ch",
+            transition: "color 0.25s ease",
+            userSelect: "none",
+          }}>
+            {String(i + 1).padStart(2, "0")}
+          </span>
+          <div style={{ paddingTop: "0.3rem" }}>
+            <p style={{
+              fontFamily: "var(--font-special-gothic, sans-serif)",
+              fontSize: "clamp(1.05rem, 1.6vw, 1.3rem)",
+              color: "var(--fg)",
+              lineHeight: 1.25,
+              marginBottom: "0.55rem",
+            }}>
+              {item.title}
+            </p>
+            <p style={{
+              fontSize: "0.95rem",
+              color: active === i ? "var(--fg)" : "var(--fg-dim)",
+              lineHeight: 1.8,
+              transition: "color 0.25s ease",
+            }}>
+              {item.body}
+            </p>
+          </div>
         </div>
       ))}
     </div>
@@ -201,7 +228,6 @@ export function WhatYouNeedStepper({ items }: { items: WhatYouNeedItem[] }) {
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <p
                     style={{
-                      fontFamily: "var(--font-space-mono), monospace",
                       fontSize: "1rem",
                       color: isOpen ? "var(--fg)" : "var(--fg-dim)",
                       lineHeight: 1.5,
@@ -229,7 +255,6 @@ export function WhatYouNeedStepper({ items }: { items: WhatYouNeedItem[] }) {
                 {isOpen && item.description && (
                   <p
                     style={{
-                      fontFamily: "var(--font-space-mono), monospace",
                       fontSize: "1rem",
                       color: "rgba(168,255,60,0.65)",
                       lineHeight: 1.75,
@@ -378,20 +403,7 @@ export function HorizontalScrollSection({ items }: { items: UseCaseIndustry[] })
                 background: "var(--bg)",
               }}>
               <div style={{ height: "52%", position: "relative", overflow: "hidden", flexShrink: 0 }}>
-                {uc.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={uc.image}
-                    alt={uc.industry}
-                    style={{
-                      width: "100%", height: "100%",
-                      objectFit: "cover", display: "block",
-                      filter: `brightness(0.45) saturate(0.5) hue-rotate(${i * 20}deg)`,
-                    }}
-                  />
-                ) : (
-                  <div style={{ width: "100%", height: "100%", background: "rgba(168,255,60,0.03)" }} />
-                )}
+                <div style={{ width: "100%", height: "100%", background: "rgba(255,255,255,0.02)", borderBottom: "1px dashed var(--border)" }} />
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 20%, rgba(0,0,0,0.8) 100%)" }} />
                 <p className="font-mono" style={{
                   position: "absolute", bottom: "0.75rem", left: "1.1rem",
@@ -401,10 +413,28 @@ export function HorizontalScrollSection({ items }: { items: UseCaseIndustry[] })
                   {uc.industry}
                 </p>
               </div>
-              <div style={{ flex: 1, padding: "1rem 1.25rem", overflow: "hidden" }}>
-                <p className="font-mono" style={{ fontSize: "1rem", color: "var(--fg-dim)", lineHeight: 1.65 }}>
-                  {uc.description}
-                </p>
+              <div style={{ flex: 1, padding: "1rem 1.25rem", overflow: "hidden", display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+                {uc.problem ? (
+                  <>
+                    <div>
+                      <span className="font-mono" style={{ fontSize: "0.6rem", color: "var(--fg-muted)", letterSpacing: "0.08em", textTransform: "uppercase", display: "block", marginBottom: "0.2rem" }}>El problema</span>
+                      <p className="font-mono" style={{ fontSize: "0.82rem", color: "var(--fg-dim)", lineHeight: 1.6 }}>{uc.problem}</p>
+                    </div>
+                    <div>
+                      <span className="font-mono" style={{ fontSize: "0.6rem", color: "var(--accent)", letterSpacing: "0.08em", textTransform: "uppercase", display: "block", marginBottom: "0.2rem", opacity: 0.7 }}>Con el sistema</span>
+                      <p className="font-mono" style={{ fontSize: "0.82rem", color: "var(--fg)", lineHeight: 1.6 }}>{uc.solution}</p>
+                    </div>
+                    {uc.benefits && (
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem", marginTop: "0.2rem" }}>
+                        {uc.benefits.map((b, bi) => (
+                          <span key={bi} className="font-mono" style={{ fontSize: "0.6rem", color: "var(--fg-muted)", border: "1px solid var(--border)", padding: "2px 8px", borderRadius: 3 }}>{b}</span>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <p className="font-mono" style={{ fontSize: "1rem", color: "var(--fg-dim)", lineHeight: 1.65 }}>{uc.description}</p>
+                )}
               </div>
             </div>
           ))}
@@ -431,12 +461,12 @@ export function HorizontalScrollSection({ items }: { items: UseCaseIndustry[] })
                 Trabajamos con cualquier industria que genere datos.
               </p>
             </div>
-            <Link href="/contacto" className="btn-primary" style={{ width: "fit-content" }}>
+            <Link href="/contact" className="btn-primary" style={{ width: "fit-content" }}>
               Contactar →
             </Link>
           </div>
 
-          {/* trailing spacer so the CTA card never touches the viewport edge */}
+          {/* trailing spacer */}
           <div style={{ width: "clamp(1.5rem, 5vw, 6rem)", flexShrink: 0 }} />
         </div>
 

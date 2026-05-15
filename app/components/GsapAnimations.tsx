@@ -30,12 +30,20 @@ export default function GsapAnimations() {
         ease: "power2.out",
       });
 
-      /* ── 3. Hero H1 — left-to-right print reveal ── */
-      gsap.from("#hero-h1", {
-        clipPath: "inset(0 100% 0 0)",
-        duration: 1.0,
+      /* ── 3. Hero H1 — line 1 then line 2 ── */
+      gsap.from("#hero-line-1", {
+        opacity: 0,
+        y: 28,
+        duration: 0.65,
         delay: 0.3,
-        ease: "power3.inOut",
+        ease: "power3.out",
+      });
+      gsap.from("#hero-line-2", {
+        opacity: 0,
+        y: 28,
+        duration: 0.65,
+        delay: 0.62,
+        ease: "power3.out",
       });
 
       /* ── 4. Hero subtext ── */
@@ -186,6 +194,36 @@ export default function GsapAnimations() {
         delay: 0.2,
         ease: "power2.out",
         scrollTrigger: { trigger: "#contacto", start: "top 84%" },
+      });
+
+      /* ── 21. Service grid cards stagger up ── */
+      gsap.from(".gsap-srv-card", {
+        y: 60,
+        opacity: 0,
+        stagger: 0.1,
+        duration: 0.75,
+        ease: "power3.out",
+        scrollTrigger: { trigger: "#servicios-grid", start: "top 82%" },
+      });
+
+
+      /* ── 22. Technology rows — reveal on scroll, one by one ── */
+      gsap.utils.toArray<Element>(".gsap-srv-detail").forEach((row) => {
+        gsap.from(row, {
+          y: 36,
+          opacity: 0,
+          duration: 0.6,
+          ease: "power3.out",
+          scrollTrigger: { trigger: row, start: "top 94%", end: "top 65%", toggleActions: "play none none reverse" },
+        });
+      });
+
+      /* ── 23. CTA heading reveal ── */
+      gsap.from("#cta-heading", {
+        clipPath: "inset(0 100% 0 0)",
+        duration: 1.1,
+        ease: "power3.inOut",
+        scrollTrigger: { trigger: "#cta-heading", start: "top 88%" },
       });
 
     });
